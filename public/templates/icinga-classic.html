@@ -1,0 +1,13 @@
+<h1>Icinga Classic</h1>
+
+<ng-messages for="hostStatus" role="alert">
+	<div class="alert alert-danger" role="alert" ng-message="DOWN">{{hostStats.DOWN}} hosts are in DOWN state!</div>
+	<div class="alert alert-warning" role="alert" ng-message="UNREACHABLE">{{hostStats.UNREACHABLE}} hosts are in UNREACHABLE state!</div>
+	<div class="alert alert-success" role="alert" ng-message="UP">All hosts OK.</div>
+</ng-messages>
+
+<ng-messages for="serviceStatus" role="alert">
+	<div class="alert alert-danger" role="alert" ng-message="CRITICAL">{{serviceStats.CRITICAL}} services are in CRITICAL state!</div>
+	<div class="alert alert-warning" role="alert" ng-message="WARNING">{{serviceStats.WARNING}} services are in WARNING state!</div>
+	<div class="alert alert-success" role="alert" ng-message="OK">All services are OK.</div>
+</ng-messages>

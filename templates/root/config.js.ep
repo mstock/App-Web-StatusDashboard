@@ -1,0 +1,4 @@
+% my $ws_url = url_for('/status/ws')->to_abs()->scheme( $self->req->is_secure ? 'wss' : 'ws' );
+(function () {
+	angular.module('StatusDashboard').constant('websocketUri', '<%= $ws_url %>');
+})();

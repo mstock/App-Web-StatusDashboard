@@ -1,0 +1,3 @@
+% layout 'default';
+% title 'Status Dashboard';
+<icinga-classic status-id="icinga-nfred"></icinga-classic>
