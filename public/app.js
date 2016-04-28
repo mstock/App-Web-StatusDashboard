@@ -80,5 +80,42 @@
 				}
 			}
 		}
+	]).directive('redmineIssues', [
+		'statusService',
+		function (statusService) {
+			return {
+				restrict: 'E',
+				link:     function (scope, element, attrs) {
+					scope.$watch(function () {
+						return statusService.getServiceStatus(scope.statusId)
+					}, function (newValue, oldValue) {
+						if (newValue === null) {
+							return;
+						}
+						console.log("Old: ", oldValue, "New: ", newValue);
+
+						scope.statusStats = [];
+						var statusStats = {};
+						newValue.issues.forEach(function (issue) {
+							if (!statusStats[issue.status.id]) {
+								statusStats[issue.status.id] = {
+									id: issue.status.id,
+									name: issue.status.name,
+									count: 0
+								};
+								scope.statusStats.push(statusStats[issue.status.id]);
+							}
+							statusStats[issue.status.id].count++;
+						});
+						scope.issueCount = newValue.issues.length;
+					});
+				},
+				replace: false,
+				templateUrl: 'templates/redmine-issues.html',
+				scope: {
+					statusId: '@statusId'
+				}
+			}
+		}
 	]);
 })();
