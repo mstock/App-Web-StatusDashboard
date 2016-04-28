@@ -5,7 +5,7 @@ use Mojo::Base 'Mojolicious';
 # ABSTRACT: Mojolicious-based status dashboard application
 
 use Mojo::IOLoop;
-use Mojo::Loader qw(load_class);
+use Class::Load qw(load_class);
 use Test::Deep::NoTest;
 
 has 'status' => sub { return {} };
