@@ -1,5 +1,8 @@
 <h1>Redmine Issues</h1>
 
-<ul ng-repeat="issueType in statusStats | orderBy: 'count'">
-	<li>{{issueType.name}}: {{issueType.count}}</li>
-</ul>
+<canvas
+	class="chart chart-bar"
+	chart-data="chartData"
+	chart-labels="chartLabels"
+>
+</canvas>

@@ -4,13 +4,16 @@
 		<title><%= title %></title>
 		<link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap.min.css"></link>
 		<link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap-theme.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="lib/angular-chart.js/dist/angular-chart.css"></link>
 	</head>
 	<body ng-controller="RootCtrl">
 		<%= content %>
+		<script type="text/javascript" src="lib/Chart.js/Chart.js"></script>
 		<script type="text/javascript" src="lib/angular/angular.min.js"></script>
 		<script type="text/javascript" src="lib/angular-bootstrap/ui-bootstrap.min.js"></script>
 		<script type="text/javascript" src="lib/angular-messages/angular-messages.min.js"></script>
 		<script type="text/javascript" src="lib/angular-websocket/angular-websocket.min.js"></script>
+		<script type="text/javascript" src="lib/angular-chart.js/dist/angular-chart.js"></script>
 		<script type="text/javascript" src="<%= url_for('app.js') %>"></script>
 		<script type="text/javascript" src="<%= url_for('/config') %>"></script>
 	</body>

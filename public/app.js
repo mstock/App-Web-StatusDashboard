@@ -1,7 +1,8 @@
 (function () {
 	angular.module('StatusDashboard', [
 		'ngMessages',
-		'ngWebSocket'
+		'ngWebSocket',
+		'chart.js'
 	]).controller('RootCtrl', [
 		'$scope',
 		'$http',
@@ -86,6 +87,10 @@
 			return {
 				restrict: 'E',
 				link:     function (scope, element, attrs) {
+					scope.chartLabels = [];
+					scope.chartData   = [[]];
+					scope.statusStats = [];
+
 					scope.$watch(function () {
 						return statusService.getServiceStatus(scope.statusId)
 					}, function (newValue, oldValue) {
@@ -94,7 +99,6 @@
 						}
 						console.log("Old: ", oldValue, "New: ", newValue);
 
-						scope.statusStats = [];
 						var statusStats = {};
 						newValue.issues.forEach(function (issue) {
 							if (!statusStats[issue.status.id]) {
@@ -107,6 +111,14 @@
 							}
 							statusStats[issue.status.id].count++;
 						});
+
+						scope.chartLabels.length = 0;
+						scope.chartData[0].length = 0;
+						scope.statusStats.forEach(function (statusType) {
+							scope.chartLabels.push(statusType.name);
+							scope.chartData[0].push(statusType.count);
+						});
+
 						scope.issueCount = newValue.issues.length;
 					});
 				},
