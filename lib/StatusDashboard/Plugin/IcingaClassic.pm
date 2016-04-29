@@ -10,7 +10,7 @@ use Mojo::UserAgent;
 has 'dashboard';
 has 'id';
 has 'base_url';
-has 'cycle' => 4;
+has 'cycle' => 60;
 has 'ua' => sub {
 	return Mojo::UserAgent->new();
 };
