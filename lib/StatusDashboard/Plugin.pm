@@ -76,4 +76,26 @@ sub update {
 	confess('Plugins must implement the update() method');
 }
 
+
+=head2 short_name
+
+Get short name of the plugin. Will the last part of the package name, in lower
+case letters, split at the upper case letters.
+
+=head3 Result
+
+The short name.
+
+=cut
+
+sub short_name {
+	my ($self) = @_;
+
+	my $class = ref $self || $self;
+	my ($plugin_name) = $class =~ m{::(\w+)$};
+	my @parts = $plugin_name =~ m{([A-Z]?[a-z0-9]+)}g;
+	return join('-', map { lc } @parts);
+}
+
+
 1;
