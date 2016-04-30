@@ -18,28 +18,25 @@ Update the status in the dashboard.
 sub update {
 	my ($self) = @_;
 
-	my $status = {};
-
-	$self->ua()->get($self->base_url().'?style=hostdetail&jsonoutput' => sub {
-		my ($hosts_ua, $hosts_tx) = @_;
-
-		if ($hosts_tx->success()) {
-			$status->{hosts} = $hosts_tx->res->json();
-			$self->ua()->get($self->base_url().'?jsonoutput' => sub {
-				my ($services_ua, $services_tx) = @_;
-				if ($services_tx->success()) {
-					$status->{services} = $services_tx->res->json();
-					$self->dashboard()->update_status($self->id(), $status);
-				}
-				else {
-					$log->errorf('Request failed: %s', $services_tx->error());
-				}
+	Mojo::IOLoop->delay(
+		sub {
+			my ($delay) = @_;
+			$self->ua()->get(
+				$self->base_url().'?style=hostdetail&jsonoutput' => $delay->begin()
+			);
+			$self->ua()->get(
+				$self->base_url().'?jsonoutput' => $delay->begin()
+			);
+		},
+		sub {
+			my ($delay, $hostdetail, $servicedetail) = @_;
+			$self->dashboard()->update_status($self->id(), {
+				services => $servicedetail->res->json(),
+				hosts    => $hostdetail->res->json()
 			});
 		}
-		else {
-			$log->errorf('Request failed: %s', $hosts_tx->error());
-		}
-	});
+	)->wait;
+
 	return;
 }
 
