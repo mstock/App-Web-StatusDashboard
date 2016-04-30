@@ -1,10 +1,14 @@
-<h1>Redmine Issues</h1>
-
-<canvas
-	class="chart chart-bar"
-	chart-data="chartData"
-	chart-labels="chartLabels"
-	chart-series="chartSeries"
-	chart-options="chartOptions"
+<status-display
+	title-prefix="Redmine"
+	title="{{ title }}"
+	status-id="{{ statusId }}"
 >
-</canvas>
+	<canvas
+		class="chart chart-bar"
+		chart-data="chartData"
+		chart-labels="chartLabels"
+		chart-series="chartSeries"
+		chart-options="chartOptions"
+	>
+	</canvas>
+</status-display>

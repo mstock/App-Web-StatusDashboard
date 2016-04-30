@@ -46,7 +46,8 @@
 				replace:     false,
 				templateUrl: 'plugins/templates/icinga-classic.html',
 				scope:       {
-					statusId: '@statusId'
+					statusId: '@statusId',
+					title:    '@title'
 				}
 			}
 		}
