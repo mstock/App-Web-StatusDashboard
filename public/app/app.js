@@ -26,6 +26,11 @@
 					return (status && serviceId && serviceId in status)
 						? status[serviceId].data
 						: null;
+				},
+				getLastUpdated: function (serviceId) {
+					return (status && serviceId && serviceId in status)
+						? status[serviceId].last_updated
+						: null;
 				}
 			};
 		}
@@ -35,7 +40,17 @@
 			return {
 				restrict:    'E',
 				link:        function (scope, element, attrs) {
-
+					scope.$watch(
+						function() {
+							return statusService.getLastUpdated(scope.statusId)
+						},
+						function(newValue, oldValue) {
+							if (newValue === null) {
+								return;
+							}
+							scope.lastUpdated = newValue;
+						}
+					);
 				},
 				replace:     false,
 				templateUrl: 'app/templates/status-display.html',
