@@ -24,7 +24,7 @@
 			return {
 				getServiceStatus: function (serviceId) {
 					return (status && serviceId && serviceId in status)
-						? status[serviceId]
+						? status[serviceId].data
 						: null;
 				}
 			};

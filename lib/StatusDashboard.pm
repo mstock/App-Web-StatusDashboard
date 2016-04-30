@@ -6,6 +6,7 @@ use Mojo::Base 'Mojolicious';
 
 use Mojo::IOLoop;
 use Class::Load qw(load_class);
+use DateTime;
 use Test::Deep::NoTest;
 
 has 'status' => sub { return {} };
@@ -85,13 +86,17 @@ sub update_status {
 	my ($self, $status_id, $status) = @_;
 	warn "Status update from " . $status_id;
 
-	if (!eq_deeply($self->status()->{$status_id}, $status)) {
-		$self->status()->{$status_id} = $status;
+	if (!eq_deeply($self->status()->{$status_id}->{data}, $status)) {
+		my $new_status = {
+			data         => $status,
+			last_updated => DateTime->now->strftime('%Y%m%dT%H%M%S%z'),
+		};
+		$self->status()->{$status_id} = $new_status;
 		for my $client (values %{$self->websocket_clients()}) {
 			$client->send({
 				json => {
-					$status_id => $status
-				}
+					$status_id => $new_status,
+				},
 			});
 		}
 	}
