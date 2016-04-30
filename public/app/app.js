@@ -22,7 +22,7 @@
 			});
 
 			return {
-				getServiceStatus: function (serviceId) {
+				getStatus: function (serviceId) {
 					return (status && serviceId && serviceId in status)
 						? status[serviceId].data
 						: null;

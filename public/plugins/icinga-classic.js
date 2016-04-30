@@ -10,7 +10,7 @@
 				restrict:    'E',
 				link:        function (scope, element, attrs) {
 					scope.$watch(function () {
-						return statusService.getServiceStatus(scope.statusId)
+						return statusService.getStatus(scope.statusId)
 					}, function (newValue, oldValue) {
 						if (newValue === null) {
 							return;
