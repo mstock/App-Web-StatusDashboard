@@ -1,13 +1,68 @@
 <h1>Icinga Classic</h1>
 
 <ng-messages for="hostStatus" role="alert">
-	<div class="alert alert-danger" role="alert" ng-message="DOWN">{{hostStats.DOWN}} hosts are in DOWN state!</div>
-	<div class="alert alert-warning" role="alert" ng-message="UNREACHABLE">{{hostStats.UNREACHABLE}} hosts are in UNREACHABLE state!</div>
-	<div class="alert alert-success" role="alert" ng-message="UP">All hosts OK.</div>
+	<div class="alert alert-danger" role="alert" ng-message="DOWN">
+		{{hostStats.DOWN, plural,
+			=0    {}
+			=1    {One host is in DOWN state.}
+			other {{{hostStats.DOWN}} hosts are in DOWN state.}
+		}}
+		{{hostStats.UNREACHABLE, plural,
+			=0    {}
+			=1    {One host is in UNREACHABLE state.}
+			other {{{hostStats.UNREACHABLE}} hosts are in UNREACHABLE state.}
+		}}
+	</div>
+	<div class="alert alert-warning" role="alert" ng-message="UNREACHABLE">
+		{{hostStats.UNREACHABLE, plural,
+			=0    {}
+			=1    {One host is in UNREACHABLE state.}
+			other {{{hostStats.UNREACHABLE}} hosts are in UNREACHABLE state.}
+		}}
+	</div>
+	<div class="alert alert-success" role="alert" ng-message="UP">
+		All hosts are in OK state.
+	</div>
 </ng-messages>
 
 <ng-messages for="serviceStatus" role="alert">
-	<div class="alert alert-danger" role="alert" ng-message="CRITICAL">{{serviceStats.CRITICAL}} services are in CRITICAL state!</div>
-	<div class="alert alert-warning" role="alert" ng-message="WARNING">{{serviceStats.WARNING}} services are in WARNING state!</div>
-	<div class="alert alert-success" role="alert" ng-message="OK">All services are OK.</div>
+	<div class="alert alert-danger" role="alert" ng-message="CRITICAL">
+		{{serviceStats.CRITICAL, plural,
+			=0    {}
+			=1    {One service is in CRITICAL state.}
+			other {{{serviceStats.CRITICAL}} services are in CRITICAL state.}
+		}}
+		{{serviceStats.WARNING, plural,
+			=0    {}
+			=1    {One service is in WARNING state.}
+			other {{{serviceStats.WARNING}} services are in WARNING state.}
+		}}
+		{{serviceStats.UNKNOWN, plural,
+			=0    {}
+			=1    {One service is in UNKNOWN state.}
+			other {{{serviceStats.UNKNOWN}} services are in UNKNOWN state.}
+		}}
+	</div>
+	<div class="alert alert-warning" role="alert" ng-message="WARNING">
+		{{serviceStats.WARNING, plural,
+			=0    {}
+			=1    {One service is in WARNING state!}
+			other {{{serviceStats.WARNING}} services are in WARNING state.}
+		}}
+		{{serviceStats.UNKNOWN, plural,
+			=0    {}
+			=1    {One service is in UNKNOWN state.}
+			other {{{serviceStats.UNKNOWN}} services are in UNKNOWN state.}
+		}}
+	</div>
+	<div class="alert alert-warning" role="alert" ng-message="INFO">
+		{{serviceStats.UNKNOWN, plural,
+			=0    {}
+			=1    {One service is in UNKNOWN state.}
+			other {{{serviceStats.UNKNOWN}} services are in UNKNOWN state.}
+		}}
+	</div>
+	<div class="alert alert-success" role="alert" ng-message="OK">
+		All services are in OK state.
+	</div>
 </ng-messages>
