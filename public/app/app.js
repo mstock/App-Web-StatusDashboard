@@ -29,5 +29,23 @@
 				}
 			};
 		}
+	]).directive('statusDisplay', [
+		'statusService',
+		function (statusService) {
+			return {
+				restrict:    'E',
+				link:        function (scope, element, attrs) {
+
+				},
+				replace:     false,
+				templateUrl: 'app/templates/status-display.html',
+				scope:       {
+					title:       '@title',
+					titlePrefix: '@titlePrefix',
+					statusId:    '@statusId'
+				},
+				transclude:  true
+			}
+		}
 	]);
 })();

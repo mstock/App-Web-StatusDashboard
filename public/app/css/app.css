@@ -2,3 +2,11 @@ body {
 	color: #666;
 	background-color: #222;
 }
+
+h1 {
+	font-size: 26px;
+}
+
+status-display ng-transclude {
+	display: block;
+}
