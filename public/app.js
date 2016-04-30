@@ -3,12 +3,6 @@
 		'ngMessages',
 		'ngWebSocket',
 		'chart.js'
-	]).controller('RootCtrl', [
-		'$scope',
-		'$http',
-		function ($scope, $http) {
-			console.log("Setting up root controller");
-		}
 	]).service('statusService', [
 		'$http',
 		'$websocket',

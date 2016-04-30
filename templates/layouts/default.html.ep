@@ -5,7 +5,7 @@
 		<link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap.min.css"></link>
 		<link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap-theme.min.css"></link>
 	</head>
-	<body ng-controller="RootCtrl">
+	<body>
 		<%= content %>
 		<script type="text/javascript" src="lib/Chart.js/dist/Chart.min.js"></script>
 		<script type="text/javascript" src="lib/angular/angular.min.js"></script>
