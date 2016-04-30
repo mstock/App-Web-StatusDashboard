@@ -11,6 +11,7 @@
 		<script type="text/javascript" src="lib/angular/angular.min.js"></script>
 		<script type="text/javascript" src="lib/angular-bootstrap/ui-bootstrap.min.js"></script>
 		<script type="text/javascript" src="lib/angular-messages/angular-messages.min.js"></script>
+		<script type="text/javascript" src="lib/angular-message-format/angular-message-format.min.js"></script>
 		<script type="text/javascript" src="lib/angular-websocket/angular-websocket.min.js"></script>
 		<script type="text/javascript" src="lib/angular-chart.js/dist/angular-chart.js"></script>
 		<script type="text/javascript" src="<%= url_for('app.js') %>"></script>

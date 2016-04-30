@@ -4,6 +4,7 @@
 	angular.module('StatusDashboard', [
 		'ngMessages',
 		'ngWebSocket',
+		'ngMessageFormat',
 		'chart.js'
 	]).service('statusService', [
 		'$http',
