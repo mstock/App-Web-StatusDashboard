@@ -8,6 +8,8 @@ use Mojo::IOLoop;
 use Class::Load qw(load_class);
 use DateTime;
 use Test::Deep::NoTest;
+use Log::Any qw($log);
+use Log::Any::Adapter;
 
 has 'status' => sub { return {} };
 has 'websocket_clients' => sub { return {} };
@@ -21,6 +23,8 @@ Mojolicious startup method.
 
 sub startup {
 	my ($self) = @_;
+
+	Log::Any::Adapter->set('MojoLog', logger => $self->log());
 
 	my $r = $self->routes;
 	$r->get('/')->to('root#index');
@@ -84,7 +88,8 @@ Nothing on success, an exception otherwise.
 
 sub update_status {
 	my ($self, $status_id, $status) = @_;
-	warn "Status update from " . $status_id;
+
+	$log->debug('Status update from ' . $status_id);
 
 	if (!eq_deeply($self->status()->{$status_id}->{data}, $status)) {
 		my $new_status = {

@@ -4,6 +4,8 @@ use Mojo::Base 'StatusDashboard::Plugin';
 
 # ABSTRACT: Simple plugin to fetch status from an Icinga classic instance
 
+use Log::Any qw($log);
+
 has 'base_url';
 
 
@@ -30,12 +32,12 @@ sub update {
 					$self->dashboard()->update_status($self->id(), $status);
 				}
 				else {
-					warn $services_tx->error();
+					$log->errorf('Request failed: %s', $services_tx->error());
 				}
 			});
 		}
 		else {
-			warn $hosts_tx->error();
+			$log->errorf('Request failed: %s', $hosts_tx->error());
 		}
 	});
 	return;

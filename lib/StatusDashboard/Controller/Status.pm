@@ -4,6 +4,7 @@ use Mojo::Base 'Mojolicious::Controller';
 
 # ABSTRACT: Provide action that returns status as JSON and endpoint for websocket
 
+use Log::Any qw($log);
 
 =head2 status
 
@@ -28,16 +29,16 @@ Initialize the status websocket.
 sub statuswsinit {
 	my ($self) = @_;
 
-	$self->app->log->info('Initializing websocket...');
+	$log->debug('Initializing websocket...');
 	$self->app->register_client($self->tx);
 	$self->on('finished', sub {
 		my ($self) = @_;
 		$self->app->unregister_client($self->tx);
-		$self->app->log->debug('Client disconnected');
+		$log->debug('Client disconnected');
 	});
 	$self->on('message', sub {
 		my ($self, $message) = @_;
-		$self->app->log->debug('Client message: ' . $message);
+		$log->debug('Client message: ' . $message);
 	});
 	return;
 }
