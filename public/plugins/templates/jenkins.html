@@ -1,0 +1,36 @@
+<status-display
+	title-prefix="Jenkins"
+	title="{{ title }}"
+	status-id="{{ statusId }}"
+>
+	<div class="progress">
+		<div
+			class="progress-bar"
+			ng-class="{
+				'progress-bar-info': busyExecutors < totalExecutors,
+				'progress-bar-danger': busyExecutors == totalExecutors
+			}"
+			ng-style="{ 'width': busyPercent + '%'}"
+		>
+			<span>
+				{{ busyExecutors, plural,
+					=0    {No executor busy}
+					=1    {One executor busy}
+					other {{{busyExecutors}} executors busy}
+				}}
+			</span>
+		</div>
+		<div
+			class="progress-bar progress-bar-success"
+			ng-style="{ 'width': idlePercent + '%'}"
+		>
+			<span>
+				{{ idleExecutors, plural,
+					=0    {No executor idle}
+					=1    {One executor idle}
+					other {{{idleExecutors}} executors idle}
+				}}
+			</span>
+		</div>
+	</div>
+</status-display>
