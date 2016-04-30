@@ -5,7 +5,8 @@
 		'ngMessages',
 		'ngWebSocket',
 		'ngMessageFormat',
-		'chart.js'
+		'chart.js',
+		'angularMoment'
 	]).service('statusService', [
 		'$http',
 		'$websocket',
@@ -36,7 +37,8 @@
 		}
 	]).directive('statusDisplay', [
 		'statusService',
-		function (statusService) {
+		'moment',
+		function (statusService, moment) {
 			return {
 				restrict:    'E',
 				link:        function (scope, element, attrs) {
@@ -48,7 +50,7 @@
 							if (newValue === null) {
 								return;
 							}
-							scope.lastUpdated = newValue;
+							scope.lastUpdated = moment(newValue, 'YYYYMMDDTHHmmssZ');
 						}
 					);
 				},
