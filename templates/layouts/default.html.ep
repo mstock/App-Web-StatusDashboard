@@ -4,6 +4,7 @@
 		<title><%= title %></title>
 		<link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap.min.css"></link>
 		<link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap-theme.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="css/app.css"></link>
 	</head>
 	<body>
 		<%= content %>
