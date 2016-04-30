@@ -92,8 +92,8 @@
 				replace:     false,
 				templateUrl: 'plugins/templates/redmine-issues.html',
 				scope:       {
-					statusId: '@statusId',
-					title:    '@title'
+					statusId:    '@statusId',
+					titleSuffix: '@titleSuffix'
 				}
 			}
 		}

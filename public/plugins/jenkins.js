@@ -56,8 +56,8 @@
 				replace:     false,
 				templateUrl: 'plugins/templates/jenkins.html',
 				scope:       {
-					statusId: '@statusId',
-					title:    '@title'
+					statusId:    '@statusId',
+					titleSuffix: '@titleSuffix'
 				}
 			}
 		}
