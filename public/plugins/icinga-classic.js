@@ -44,7 +44,7 @@
 					});
 				},
 				replace:     false,
-				templateUrl: 'templates/icinga-classic.html',
+				templateUrl: 'plugins/templates/icinga-classic.html',
 				scope:       {
 					statusId: '@statusId'
 				}

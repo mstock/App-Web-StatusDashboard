@@ -90,7 +90,7 @@
 					);
 				},
 				replace:     false,
-				templateUrl: 'templates/redmine-issues.html',
+				templateUrl: 'plugins/templates/redmine-issues.html',
 				scope:       {
 					statusId: '@statusId'
 				}
