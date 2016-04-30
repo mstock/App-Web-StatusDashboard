@@ -10,7 +10,7 @@ use Test::Deep::NoTest;
 
 has 'status' => sub { return {} };
 has 'websocket_clients' => sub { return {} };
-
+has 'status_plugins' => sub { return {} };
 
 =head2 startup
 
@@ -30,6 +30,7 @@ sub startup {
 	my $config = $self->plugin('Config');
 	for my $plugin ($self->_load_plugins($config)) {
 		$plugin->init();
+		push @{$self->status_plugins()->{ref $plugin} //= []}, $plugin;
 	}
 }
 
