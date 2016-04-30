@@ -1,36 +1,10 @@
 package StatusDashboard::Plugin::IcingaClassic;
 
-use Mojo::Base -base;
+use Mojo::Base 'StatusDashboard::Plugin';
 
 # ABSTRACT: Simple plugin to fetch status from an Icinga classic instance
 
-use Mojo::IOLoop;
-use Mojo::UserAgent;
-
-has 'dashboard';
-has 'id';
 has 'base_url';
-has 'cycle' => 60;
-has 'ua' => sub {
-	return Mojo::UserAgent->new();
-};
-
-
-=head2 init
-
-Initialize the plugin.
-
-=cut
-
-sub init {
-	my ($self) = @_;
-
-	Mojo::IOLoop->recurring($self->cycle(), sub {
-		$self->update();
-	});
-	$self->update();
-	return;
-}
 
 
 =head2 update
@@ -66,5 +40,6 @@ sub update {
 	});
 	return;
 }
+
 
 1;
