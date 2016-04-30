@@ -2,19 +2,19 @@
 <html ng-app="StatusDashboard">
 	<head>
 		<title><%= title %></title>
-		<link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap.min.css"></link>
-		<link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap-theme.min.css"></link>
-		<link rel="stylesheet" type="text/css" href="css/app.css"></link>
+		<link rel="stylesheet" type="text/css" href="<%= url_for('lib/bootstrap/dist/css/bootstrap.min.css') %>"></link>
+		<link rel="stylesheet" type="text/css" href="<%= url_for('lib/bootstrap/dist/css/bootstrap-theme.min.css') %>"></link>
+		<link rel="stylesheet" type="text/css" href="<%= url_for('css/app.css') %>"></link>
 	</head>
 	<body>
 		<%= content %>
-		<script type="text/javascript" src="lib/Chart.js/dist/Chart.min.js"></script>
-		<script type="text/javascript" src="lib/angular/angular.min.js"></script>
-		<script type="text/javascript" src="lib/angular-bootstrap/ui-bootstrap.min.js"></script>
-		<script type="text/javascript" src="lib/angular-messages/angular-messages.min.js"></script>
-		<script type="text/javascript" src="lib/angular-message-format/angular-message-format.min.js"></script>
-		<script type="text/javascript" src="lib/angular-websocket/angular-websocket.min.js"></script>
-		<script type="text/javascript" src="lib/angular-chart.js/dist/angular-chart.js"></script>
+		<script type="text/javascript" src="<%= url_for('lib/Chart.js/dist/Chart.min.js') %>"></script>
+		<script type="text/javascript" src="<%= url_for('lib/angular/angular.min.js') %>"></script>
+		<script type="text/javascript" src="<%= url_for('lib/angular-bootstrap/ui-bootstrap.min.js') %>"></script>
+		<script type="text/javascript" src="<%= url_for('lib/angular-messages/angular-messages.min.js') %>"></script>
+		<script type="text/javascript" src="<%= url_for('lib/angular-message-format/angular-message-format.min.js') %>"></script>
+		<script type="text/javascript" src="<%= url_for('lib/angular-websocket/angular-websocket.min.js') %>"></script>
+		<script type="text/javascript" src="<%= url_for('lib/angular-chart.js/dist/angular-chart.js') %>"></script>
 		<script type="text/javascript" src="<%= url_for('app.js') %>"></script>
 		<script type="text/javascript" src="<%= url_for('/config') %>"></script>
 		% for my $plugin (keys %{app->status_plugins()}) {
