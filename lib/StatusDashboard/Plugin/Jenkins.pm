@@ -18,16 +18,25 @@ Update the status in the dashboard.
 sub update {
 	my ($self) = @_;
 
-	$self->ua()->get($self->base_url() => sub {
-		my ($hosts_ua, $hosts_tx) = @_;
+	Mojo::IOLoop->delay(
+		sub {
+			my ($delay) = @_;
+			$self->ua()->get(
+				$self->base_url().'/computer/api/json?tree=busyExecutors,totalExecutors' => $delay->begin()
+			);
+			$self->ua()->get(
+				$self->base_url().'/api/json?tree=jobs[name,color]' => $delay->begin()
+			);
+		},
+		sub {
+			my ($delay, $executors, $jobs) = @_;
+			$self->dashboard()->update_status($self->id(), {
+				executors => $executors->res->json(),
+				jobs      => $jobs->res->json()->{jobs}
+			});
+		}
+	)->wait;
 
-		if ($hosts_tx->success()) {
-			$self->dashboard()->update_status($self->id(), $hosts_tx->res->json());
-		}
-		else {
-			$log->errorf('Request failed: %s', $hosts_tx->error());
-		}
-	});
 	return;
 }
 
