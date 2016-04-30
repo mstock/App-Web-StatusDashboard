@@ -15,5 +15,8 @@
 		<script type="text/javascript" src="lib/angular-chart.js/dist/angular-chart.js"></script>
 		<script type="text/javascript" src="<%= url_for('app.js') %>"></script>
 		<script type="text/javascript" src="<%= url_for('/config') %>"></script>
+		% for my $plugin (keys %{app->status_plugins()}) {
+			<script type="text/javascript" src="<%= url_for('/plugins/' . $plugin->short_name() . '.js') %>"></script>
+		% }
 	</body>
 </html>
