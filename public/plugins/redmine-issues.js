@@ -97,5 +97,46 @@
 				}
 			}
 		}
+	]).directive('redmineIssuesNewest', [
+		'statusService',
+		function(statusService) {
+			return {
+				restrict:    'E',
+				link :       function(scope, element, attrs) {
+					scope.latest = [];
+
+					scope.$watch(
+						function() {
+							return statusService.getStatus(scope.statusId)
+						},
+						function(newValue, oldValue) {
+							if (newValue === null) {
+								return;
+							}
+							scope.issues = newValue.issues;
+						}
+					);
+					scope.$watch('trackerClassStr', function (newValue, oldValue) {
+						scope.trackerClass = scope.$eval(scope.trackerClassStr);
+					});
+					scope.$watch('priorityClassStr', function (newValue, oldValue) {
+						scope.priorityClass = scope.$eval(scope.priorityClassStr);
+					});
+					scope.$watch('statusClassStr', function (newValue, oldValue) {
+						scope.statusClass = scope.$eval(scope.statusClassStr);
+					});
+				},
+				replace:     false,
+				templateUrl: 'plugins/templates/redmine-issues-newest.html',
+				scope:       {
+					statusId:         '@statusId',
+					titleSuffix:      '@titleSuffix',
+					count:            '@count',
+					trackerClassStr:  '@trackerClass',
+					priorityClassStr: '@priorityClass',
+					statusClassStr:   '@statusClass'
+				}
+			}
+		}
 	]);
 }());
