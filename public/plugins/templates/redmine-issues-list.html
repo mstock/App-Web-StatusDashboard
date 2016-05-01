@@ -1,9 +1,9 @@
 <status-display
-	title-prefix="Redmine Newest"
+	title-prefix="Redmine"
 	title-suffix="{{ titleSuffix }}"
 	status-id="{{ statusId }}"
 >
-	<ul ng-repeat="issue in issues | orderBy : 'created_on' : true | limitTo : count || 10">
+	<ul ng-repeat="issue in issues | orderBy : orderBy || 'created_on' : reverse | limitTo : count || 10">
 		<li>
 			{{issue.subject}}
 			<span

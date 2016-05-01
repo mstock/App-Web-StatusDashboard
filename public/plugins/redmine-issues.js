@@ -97,7 +97,7 @@
 				}
 			}
 		}
-	]).directive('redmineIssuesNewest', [
+	]).directive('redmineIssuesList', [
 		'statusService',
 		function(statusService) {
 			return {
@@ -125,13 +125,20 @@
 					scope.$watch('statusClassStr', function (newValue, oldValue) {
 						scope.statusClass = scope.$eval(scope.statusClassStr);
 					});
+					scope.$watch('reverseStr', function (newValue, oldValue) {
+						scope.reverse = (newValue === null || newValue === undefined)
+							? true
+							: scope.$eval(newValue);
+					});
 				},
 				replace:     false,
-				templateUrl: 'plugins/templates/redmine-issues-newest.html',
+				templateUrl: 'plugins/templates/redmine-issues-list.html',
 				scope:       {
 					statusId:         '@statusId',
 					titleSuffix:      '@titleSuffix',
 					count:            '@count',
+					orderBy:          '@orderBy',
+					reverseStr:       '@reverse',
 					trackerClassStr:  '@trackerClass',
 					priorityClassStr: '@priorityClass',
 					statusClassStr:   '@statusClass'
