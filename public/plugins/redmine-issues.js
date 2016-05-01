@@ -117,13 +117,13 @@
 						}
 					);
 					scope.$watch('trackerClassStr', function (newValue, oldValue) {
-						scope.trackerClass = scope.$eval(scope.trackerClassStr);
+						scope.trackerClass = scope.$eval(newValue);
 					});
 					scope.$watch('priorityClassStr', function (newValue, oldValue) {
-						scope.priorityClass = scope.$eval(scope.priorityClassStr);
+						scope.priorityClass = scope.$eval(newValue);
 					});
 					scope.$watch('statusClassStr', function (newValue, oldValue) {
-						scope.statusClass = scope.$eval(scope.statusClassStr);
+						scope.statusClass = scope.$eval(newValue);
 					});
 					scope.$watch('reverseStr', function (newValue, oldValue) {
 						scope.reverse = (newValue === null || newValue === undefined)
