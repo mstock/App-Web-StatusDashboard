@@ -5,6 +5,7 @@ use Mojo::Base 'StatusDashboard::Plugin';
 # ABSTRACT: Simple plugin to fetch status from an Icinga classic instance
 
 use Log::Any qw($log);
+use Mojo::URL;
 
 has 'base_url';
 
@@ -18,14 +19,20 @@ Update the status in the dashboard.
 sub update {
 	my ($self) = @_;
 
+	my $url = Mojo::URL->new($self->base_url());
 	Mojo::IOLoop->delay(
 		sub {
 			my ($delay) = @_;
 			$self->ua()->get(
-				$self->base_url().'?style=hostdetail&jsonoutput' => $delay->begin()
+				$url->clone()->query([
+					jsonoutput => '',
+					style => 'hostdetail'
+				]) => $delay->begin()
 			);
 			$self->ua()->get(
-				$self->base_url().'?jsonoutput' => $delay->begin()
+				$url->clone()->query([
+					jsonoutput => ''
+				]) => $delay->begin()
 			);
 		},
 		sub {

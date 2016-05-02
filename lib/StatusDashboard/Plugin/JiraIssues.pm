@@ -5,6 +5,7 @@ use Mojo::Base 'StatusDashboard::Plugin';
 # ABSTRACT: Simple plugin to fetch issues from Jira
 
 use Log::Any qw($log);
+use Mojo::URL;
 
 has 'base_url';
 
@@ -18,11 +19,14 @@ Update the status in the dashboard.
 sub update {
 	my ($self) = @_;
 
+	my $url = Mojo::URL->new($self->base_url());
 	Mojo::IOLoop->delay(
 		sub {
 			my ($delay) = @_;
 			$self->ua()->get(
-				$self->base_url().'&maxResults=0' => $delay->begin()
+				$url->clone()->query([
+					maxResults => 0
+				]) => $delay->begin()
 			);
 		},
 		sub {
@@ -33,7 +37,10 @@ sub update {
 			my $max_results = 50;
 			while ($start_at < $total) {
 				$self->ua()->get(
-					$self->base_url().'&maxResults=' . $max_results . '&startAt=' . $start_at => $delay->begin()
+					$url->clone()->query([
+						maxResults => $max_results,
+						startAt    => $start_at,
+					]) => $delay->begin()
 				);
 				$start_at = $start_at + $max_results;
 			}

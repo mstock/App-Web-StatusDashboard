@@ -5,6 +5,7 @@ use Mojo::Base 'StatusDashboard::Plugin';
 # ABSTRACT: Simple plugin to fetch status from Jenkins
 
 use Log::Any qw($log);
+use Mojo::URL;
 
 has 'base_url';
 
@@ -18,14 +19,19 @@ Update the status in the dashboard.
 sub update {
 	my ($self) = @_;
 
+	my $url = Mojo::URL->new($self->base_url());
 	Mojo::IOLoop->delay(
 		sub {
 			my ($delay) = @_;
 			$self->ua()->get(
-				$self->base_url().'/computer/api/json?tree=busyExecutors,totalExecutors' => $delay->begin()
+				$url->clone()->path('computer/api/json')->query([
+					tree => 'busyExecutors,totalExecutors'
+				]) => $delay->begin()
 			);
 			$self->ua()->get(
-				$self->base_url().'/api/json?tree=jobs[name,color]' => $delay->begin()
+				$url->clone()->path('api/json')->query([
+					tree => 'jobs[name,color]'
+				]) => $delay->begin()
 			);
 		},
 		sub {

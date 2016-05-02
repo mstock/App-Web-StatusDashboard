@@ -5,6 +5,7 @@ use Mojo::Base 'StatusDashboard::Plugin';
 # ABSTRACT: Simple plugin to fetch Redmine issues
 
 use Log::Any qw($log);
+use Mojo::URL;
 
 has 'base_url';
 
@@ -18,7 +19,8 @@ Update the status in the dashboard.
 sub update {
 	my ($self) = @_;
 
-	$self->ua()->get($self->base_url() => sub {
+	my $url = Mojo::URL->new($self->base_url());
+	$self->ua()->get($url => sub {
 		my ($hosts_ua, $hosts_tx) = @_;
 
 		if ($hosts_tx->success()) {
