@@ -6,7 +6,8 @@
 		'ngWebSocket',
 		'ngMessageFormat',
 		'chart.js',
-		'angularMoment'
+		'angularMoment',
+		'ui.bootstrap'
 	]).service('statusService', [
 		'$http',
 		'$websocket',
