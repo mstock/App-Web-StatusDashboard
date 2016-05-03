@@ -16,7 +16,6 @@
 						if (newValue === null) {
 							return;
 						}
-						console.log("Old: ", oldValue, "New: ", newValue);
 
 						var statusStats = {};
 						newValue.forEach(function (issue) {

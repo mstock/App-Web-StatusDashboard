@@ -31,7 +31,6 @@
 						if (newValue === null) {
 							return;
 						}
-						console.log("Old: ", oldValue, "New: ", newValue);
 
 						var executors = newValue.executors;
 						scope.totalExecutors = executors.totalExecutors;
