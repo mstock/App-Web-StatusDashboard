@@ -7,6 +7,7 @@ use Mojo::Base -base;
 use Carp;
 use Mojo::IOLoop;
 use Mojo::UserAgent;
+use Log::Any qw($log);
 
 has 'dashboard';
 has 'id';
@@ -95,6 +96,36 @@ sub short_name {
 	my ($plugin_name) = $class =~ m{::(\w+)$};
 	my @parts = $plugin_name =~ m{([A-Z]?[a-z0-9]+)}g;
 	return join('-', map { lc } @parts);
+}
+
+
+=head2 log_update_error
+
+Log an error that occurred during the data update.
+
+=head3 Parameters
+
+This method expects positional parameters.
+
+=over
+
+=item error
+
+The error message/exception.
+
+=back
+
+=cut
+
+sub log_update_error {
+	my ($self, $error) = @_;
+
+	if (defined $error && !ref $error) {
+		chomp $error;
+	}
+	$log->errorf('%s[%s]: Error while updating data: %s',
+		ref $self, $self->id(), $error);
+	return;
 }
 
 
