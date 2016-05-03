@@ -51,7 +51,10 @@ sub update {
 				map { @{$_->res->json()->{issues}} } @responses
 			]);
 		}
-	)->wait;
+	)->catch(sub {
+		my ($delay, $err) = @_;
+		$self->log_update_error($err);
+	})->wait;
 
 	return;
 }

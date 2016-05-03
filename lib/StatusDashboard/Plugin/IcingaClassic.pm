@@ -42,7 +42,10 @@ sub update {
 				hosts    => $hostdetail->res->json()
 			});
 		}
-	)->wait;
+	)->catch(sub {
+		my ($delay, $err) = @_;
+		$self->log_update_error($err);
+	})->wait;
 
 	return;
 }

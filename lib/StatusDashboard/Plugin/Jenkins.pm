@@ -41,7 +41,10 @@ sub update {
 				jobs      => $jobs->res->json()->{jobs}
 			});
 		}
-	)->wait;
+	)->catch(sub {
+		my ($delay, $err) = @_;
+		$self->log_update_error($err);
+	})->wait;
 
 	return;
 }
