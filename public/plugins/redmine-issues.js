@@ -34,7 +34,7 @@
 
 							var statusStats = {};
 							var trackers = {};
-							newValue.issues.forEach(function(issue) {
+							newValue.forEach(function(issue) {
 								if (!statusStats[issue.status.id]) {
 									statusStats[issue.status.id] = {
 										id : issue.status.id,
@@ -85,7 +85,7 @@
 									);
 								})
 							});
-							scope.issueCount = newValue.issues.length;
+							scope.issueCount = newValue.length;
 						}
 					);
 				},
@@ -113,7 +113,7 @@
 							if (newValue === null) {
 								return;
 							}
-							scope.issues = newValue.issues;
+							scope.issues = newValue;
 						}
 					);
 					scope.$watch('trackerClassStr', function (newValue, oldValue) {
