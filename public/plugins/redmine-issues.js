@@ -31,6 +31,7 @@
 								return;
 							}
 
+							scope.statusStats.length = 0;
 							var statusStats = {};
 							var trackers = {};
 							newValue.forEach(function(issue) {
@@ -70,7 +71,7 @@
 								return tracker.name;
 							});
 							scope.chartLabels.length = 0;
-							scope.chartData[0].length = 0;
+							scope.chartData.length = 0;
 							scope.statusStats.forEach(function(statusType) {
 								scope.chartLabels.push(statusType.name);
 								trackerList.forEach(function(tracker, index) {
