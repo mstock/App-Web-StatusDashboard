@@ -60,7 +60,9 @@ sub init {
 	Mojo::IOLoop->recurring($self->cycle(), sub {
 		$self->update();
 	});
-	$self->update();
+	Mojo::IOLoop->timer(0, sub {
+		$self->update();
+	});
 	return;
 }
 
