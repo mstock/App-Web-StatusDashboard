@@ -10,10 +10,12 @@ use DateTime;
 use Test::Deep::NoTest;
 use Log::Any qw($log);
 use Log::Any::Adapter;
+use File::Spec::Functions qw(catdir);
 
 has 'status' => sub { return {} };
 has 'websocket_clients' => sub { return {} };
 has 'status_plugins' => sub { return {} };
+has 'dashboards' => sub { return [] };
 
 =head2 startup
 
@@ -27,15 +29,31 @@ sub startup {
 	Log::Any::Adapter->set('MojoLog', logger => $self->log());
 
 	my $r = $self->routes;
-	$r->get('/')->to('root#index');
 	$r->get('/config')->to('root#config');
 	$r->get('/status')->to('status#status');
 	$r->websocket('/status/ws')->to('status#statuswsinit');
+	$r->get('/:dashboard' => {
+		dashboard=> 'index'
+	})->to('root#index');
 
 	my $config = $self->plugin('Config');
 	for my $plugin ($self->_load_plugins($config)) {
 		$plugin->init();
 		push @{$self->status_plugins()->{ref $plugin} //= []}, $plugin;
+	}
+
+	my @dashboard_dirs = grep { -d $_ } map {
+		catdir($_, 'dashboards')
+	} @{$self->renderer()->paths()};
+	for my $dashboard_dir (@dashboard_dirs) {
+		opendir(my $dirh, $dashboard_dir) or die('Could not open '
+			. $dashboard_dir . ': ' . $!);
+		while (my $candidate = readdir($dirh)) {
+			if (my ($dashboard_name) = $candidate =~ m{^([\w_-]+)\.html\.ep$}) {
+				push @{$self->dashboards()}, $dashboard_name;
+			}
+		}
+		closedir($dirh);
 	}
 }
 

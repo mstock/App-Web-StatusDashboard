@@ -6,7 +6,7 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use Mojo::IOLoop;
 use MRO::Compat;
-
+use File::Spec::Functions qw(catfile);
 
 =head2 index
 
@@ -17,7 +17,22 @@ Provide HTML for the document root.
 sub index {
 	my ($self) = @_;
 
-	$self->render();
+	my ($dashboard) = grep {
+		$self->param('dashboard') eq $_
+	} @{$self->app()->dashboards()};
+
+	if (defined $dashboard) {
+		$self->render(
+			template => catfile('dashboards', $dashboard),
+			format   => 'html',
+			handler  => 'ep'
+		);
+	}
+	else {
+		$self->res()->code(404);
+		$self->render();
+	}
+
 	return;
 }
 

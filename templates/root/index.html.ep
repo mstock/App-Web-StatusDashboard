@@ -1,3 +1,9 @@
 % layout 'default';
-% title 'Status Dashboard';
-<icinga-classic status-id="icinga-nfred"></icinga-classic>
+% title 'Dashboard not found';
+<div class="container-fluid">
+	<div class="row">
+		<div class="alert alert-danger col-xs-10 col-sm-10 col-xs-offset-1 col-sm-offset-1 text-center" role="alert">
+			<strong>Error:</strong> Dashboard "<%= param('dashboard') %>" not found.
+		</div>
+	</div>
+</div>
