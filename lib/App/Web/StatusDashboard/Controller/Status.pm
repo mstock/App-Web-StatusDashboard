@@ -1,4 +1,4 @@
-package StatusDashboard::Controller::Status;
+package App::Web::StatusDashboard::Controller::Status;
 
 use Mojo::Base 'Mojolicious::Controller';
 

@@ -1,8 +1,8 @@
-package StatusDashboard::Plugin::RedmineIssues;
+package App::Web::StatusDashboard::Plugin::JiraIssues;
 
-use Mojo::Base 'StatusDashboard::Plugin';
+use Mojo::Base 'App::Web::StatusDashboard::Plugin';
 
-# ABSTRACT: Simple plugin to fetch Redmine issues
+# ABSTRACT: Simple plugin to fetch issues from Jira
 
 use Log::Any qw($log);
 use Mojo::URL;
@@ -20,29 +20,29 @@ sub update {
 	my ($self) = @_;
 
 	my $url = Mojo::URL->new($self->base_url());
-
 	Mojo::IOLoop->delay(
 		sub {
 			my ($delay) = @_;
 			$self->ua()->get(
 				$url->clone()->query([
-					limit => 1
+					maxResults => 0
 				]) => $delay->begin()
 			);
 		},
 		sub {
 			my ($delay, $basic) = @_;
-			my $total = $basic->res->json()->{total_count};
-			my $offset = 0;
-			my $limit = 50;
-			while ($offset < $total) {
+			$log->debugf('Jira base request: %s', $basic->res->json());
+			my $total = $basic->res->json()->{total};
+			my $start_at = 0;
+			my $max_results = 50;
+			while ($start_at < $total) {
 				$self->ua()->get(
 					$url->clone()->query([
-						limit  => $limit,
-						offset => $offset,
+						maxResults => $max_results,
+						startAt    => $start_at,
 					]) => $delay->begin()
 				);
-				$offset = $offset + $limit;
+				$start_at = $start_at + $max_results;
 			}
 		},
 		sub {

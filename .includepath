@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includepath>
-  <includepathentry path="${resource_loc:/StatusDashboard/lib}" />
-  <includepathentry path="${resource_loc:/StatusDashboard/t/lib}" />
+  <includepathentry path="${resource_loc:/App-Web-StatusDashboard/lib}" />
+  <includepathentry path="${resource_loc:/App-Web-StatusDashboard/t/lib}" />
 </includepath>
 

@@ -1,4 +1,4 @@
-package StatusDashboard;
+package App::Web::StatusDashboard;
 
 use Mojo::Base 'Mojolicious';
 

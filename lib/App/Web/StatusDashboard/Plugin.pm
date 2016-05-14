@@ -1,4 +1,4 @@
-package StatusDashboard::Plugin;
+package App::Web::StatusDashboard::Plugin;
 
 use Mojo::Base -base;
 
