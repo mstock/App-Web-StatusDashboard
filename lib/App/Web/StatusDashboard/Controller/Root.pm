@@ -4,8 +4,6 @@ use Mojo::Base 'Mojolicious::Controller';
 
 # ABSTRACT: Basic root controller which provides root HTML and configuration
 
-use Mojo::IOLoop;
-use MRO::Compat;
 use File::Spec::Functions qw(catfile);
 
 =head2 index

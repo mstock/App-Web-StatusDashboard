@@ -4,7 +4,6 @@ use Mojo::Base 'App::Web::StatusDashboard::Plugin';
 
 # ABSTRACT: Simple plugin to fetch status from Jenkins
 
-use Log::Any qw($log);
 use Mojo::URL;
 
 has 'base_url';

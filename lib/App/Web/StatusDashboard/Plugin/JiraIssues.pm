@@ -4,7 +4,6 @@ use Mojo::Base 'App::Web::StatusDashboard::Plugin';
 
 # ABSTRACT: Simple plugin to fetch issues from Jira
 
-use Log::Any qw($log);
 use Mojo::URL;
 
 has 'base_url';
@@ -31,7 +30,6 @@ sub update {
 		},
 		sub {
 			my ($delay, $basic) = @_;
-			$log->debugf('Jira base request: %s', $basic->res->json());
 			my $total = $basic->res->json()->{total};
 			my $start_at = 0;
 			my $max_results = 50;
