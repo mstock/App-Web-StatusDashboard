@@ -10,6 +10,7 @@ use DateTime;
 use Test::Deep::NoTest;
 use Log::Any qw($log);
 use Log::Any::Adapter;
+use File::ShareDir;
 use File::Spec::Functions qw(catdir);
 
 has 'status' => sub { return {} };
@@ -41,6 +42,10 @@ sub startup {
 		$plugin->init();
 		push @{$self->status_plugins()->{ref $plugin} //= []}, $plugin;
 	}
+
+	my $share_dir = eval { File::ShareDir::dist_dir('App-Web-StatusDashboard') } // 'share';
+	$self->renderer()->paths([catdir($share_dir, 'templates')]);
+	$self->static()->paths([catdir($share_dir, 'public')]);
 
 	my @dashboard_dirs = grep { -d $_ } map {
 		catdir($_, 'dashboards')

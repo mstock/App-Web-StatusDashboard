@@ -1,4 +1,4 @@
-/public/lib
+/share/public/lib
 /app-web-status_dashboard.conf
 /node_modules
 .*.swp
