@@ -1,0 +1,19 @@
+<status-display
+	status-title="{{ statusTitle }}"
+	status-id="{{ statusId }}"
+>
+	<ul ng-repeat="issue in issues | orderBy : orderBy || 'created_on' : reverse | limitTo : count || 10">
+		<li>
+			{{issue.fields.summary}}
+			<span
+				class="label label-default"
+				ng-class="issueTypeClass[issue.fields.issuetype.id]">{{issue.fields.issuetype.name}}</span>
+			<span
+				class="label label-default"
+				ng-class="statusClass[issue.fields.status.id]">{{issue.fields.status.name}}</span>
+			<span
+				class="label label-default"
+				ng-class="priorityClass[issue.fields.priority.id]">{{issue.fields.priority.name}}</span>
+		</li>
+	</ul>
+</status-display>

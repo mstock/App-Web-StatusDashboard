@@ -91,5 +91,53 @@
 				}
 			}
 		}
+	]).directive('jiraIssuesList', [
+		'statusService',
+		function(statusService) {
+			return {
+				restrict:    'E',
+				link :       function(scope, element, attrs) {
+					scope.latest = [];
+
+					scope.$watch(
+						function() {
+							return statusService.getStatus(scope.statusId)
+						},
+						function(newValue, oldValue) {
+							if (newValue === null) {
+								return;
+							}
+							scope.issues = newValue;
+						}
+					);
+					scope.$watch('issueTypeClassStr', function (newValue, oldValue) {
+						scope.issueTypeClass = scope.$eval(newValue);
+					});
+					scope.$watch('priorityClassStr', function (newValue, oldValue) {
+						scope.priorityClass = scope.$eval(newValue);
+					});
+					scope.$watch('statusClassStr', function (newValue, oldValue) {
+						scope.statusClass = scope.$eval(newValue);
+					});
+					scope.$watch('reverseStr', function (newValue, oldValue) {
+						scope.reverse = (newValue === null || newValue === undefined)
+							? false
+							: scope.$eval(newValue);
+					});
+				},
+				replace:     false,
+				templateUrl: 'plugins/templates/jira-issues-list.html',
+				scope:       {
+					statusId:           '@statusId',
+					statusTitle:        '@statusTitle',
+					count:              '@count',
+					orderBy:            '@orderBy',
+					reverseStr:         '@reverse',
+					issueTypeClassStr:  '@issueTypeClass',
+					priorityClassStr:   '@priorityClass',
+					statusClassStr:     '@statusClass'
+				}
+			}
+		}
 	]);
 }());
