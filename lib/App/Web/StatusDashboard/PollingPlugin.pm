@@ -26,7 +26,11 @@ This method expects its parameters as a hash reference.
 
 =item cycle
 
-Update cycle, defaults to 60s.
+Update cycle, defaults to 60s. If set to 0 or a negative value, no recurring
+updates will be done, so you should trigger the update via some other mechanism
+(for example using the
+L<App::Web::StatusDashboard::Plugin::UpdateTrigger|App::Web::StatusDashboard::Plugin::UpdateTrigger>
+plugin).
 
 =back
 
@@ -42,9 +46,11 @@ cycle.
 sub init {
 	my ($self, @arg) = @_;
 
-	Mojo::IOLoop->recurring($self->cycle(), sub {
-		$self->update();
-	});
+	if ($self->cycle() > 0) {
+		Mojo::IOLoop->recurring($self->cycle(), sub {
+			$self->update();
+		});
+	}
 	Mojo::IOLoop->timer(0, sub {
 		$self->update();
 	});
