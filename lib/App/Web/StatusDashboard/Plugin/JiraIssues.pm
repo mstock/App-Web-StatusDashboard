@@ -45,7 +45,7 @@ sub update {
 		},
 		sub {
 			my ($delay, @responses) = @_;
-			$self->dashboard()->update_status($self->id(), [
+			$self->update_status([
 				map { @{$_->res->json()->{issues}} } @responses
 			]);
 		}

@@ -36,7 +36,7 @@ sub update {
 		},
 		sub {
 			my ($delay, $hostdetail, $servicedetail) = @_;
-			$self->dashboard()->update_status($self->id(), {
+			$self->update_status({
 				services => $servicedetail->res->json(),
 				hosts    => $hostdetail->res->json()
 			});

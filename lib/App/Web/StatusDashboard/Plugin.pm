@@ -55,6 +55,32 @@ sub init {
 }
 
 
+=head2 update_status
+
+Publish status update to dashboard.
+
+=head3 Parameters
+
+This method expects positional parameters.
+
+=over
+
+=item status
+
+The updated status.
+
+=back
+
+=cut
+
+sub update_status {
+	my ($self, $status) = @_;
+
+	$self->dashboard()->update_status($self->id(), $status);
+	return;
+}
+
+
 =head2 short_name
 
 Get short name of the plugin. Will be the last part of the package name, in lower

@@ -35,7 +35,7 @@ sub update {
 		},
 		sub {
 			my ($delay, $executors, $jobs) = @_;
-			$self->dashboard()->update_status($self->id(), {
+			$self->update_status({
 				executors => $executors->res->json(),
 				jobs      => $jobs->res->json()->{jobs}
 			});
