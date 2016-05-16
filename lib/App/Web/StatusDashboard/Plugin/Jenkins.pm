@@ -1,6 +1,6 @@
 package App::Web::StatusDashboard::Plugin::Jenkins;
 
-use Mojo::Base 'App::Web::StatusDashboard::Plugin';
+use Mojo::Base 'App::Web::StatusDashboard::PollingPlugin';
 
 # ABSTRACT: Simple plugin to fetch status from Jenkins
 

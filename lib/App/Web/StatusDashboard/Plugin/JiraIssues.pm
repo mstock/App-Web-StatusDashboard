@@ -1,6 +1,6 @@
 package App::Web::StatusDashboard::Plugin::JiraIssues;
 
-use Mojo::Base 'App::Web::StatusDashboard::Plugin';
+use Mojo::Base 'App::Web::StatusDashboard::PollingPlugin';
 
 # ABSTRACT: Simple plugin to fetch issues from Jira
 

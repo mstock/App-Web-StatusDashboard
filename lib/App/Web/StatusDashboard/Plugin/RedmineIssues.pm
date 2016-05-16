@@ -1,6 +1,6 @@
 package App::Web::StatusDashboard::Plugin::RedmineIssues;
 
-use Mojo::Base 'App::Web::StatusDashboard::Plugin';
+use Mojo::Base 'App::Web::StatusDashboard::PollingPlugin';
 
 # ABSTRACT: Simple plugin to fetch Redmine issues
 

@@ -5,7 +5,6 @@ use Mojo::Base -base;
 # ABSTRACT: Base class for status plugins
 
 use Carp;
-use Mojo::IOLoop;
 use Mojo::UserAgent;
 use Log::Any qw($log);
 
@@ -34,10 +33,6 @@ Dashboard application instance.
 
 Id of the plugin instance.
 
-=item cycle
-
-Update cycle, defaults to 60s.
-
 =item ua
 
 A L<Mojo::UserAgent|Mojo::UserAgent> instance to use. Will be automatically
@@ -49,40 +44,20 @@ created if not passed.
 
 =head2 init
 
-Initialize the plugin. Will start recurring calls to C<update> with the configured
-cycle.
+Initialize the plugin.
 
 =cut
 
 sub init {
 	my ($self) = @_;
 
-	Mojo::IOLoop->recurring($self->cycle(), sub {
-		$self->update();
-	});
-	Mojo::IOLoop->timer(0, sub {
-		$self->update();
-	});
 	return;
-}
-
-
-=head2 update
-
-Update the status in the dashboard, and must be implemented by subclasses.
-
-=cut
-
-sub update {
-	my ($self) = @_;
-
-	confess('Plugins must implement the update() method');
 }
 
 
 =head2 short_name
 
-Get short name of the plugin. Will the last part of the package name, in lower
+Get short name of the plugin. Will be the last part of the package name, in lower
 case letters, split at the upper case letters.
 
 =head3 Result
