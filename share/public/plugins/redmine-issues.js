@@ -93,7 +93,7 @@
 				templateUrl: 'plugins/templates/redmine-issues.html',
 				scope:       {
 					statusId:    '@statusId',
-					titleSuffix: '@titleSuffix'
+					statusTitle: '@statusTitle'
 				}
 			}
 		}
@@ -135,7 +135,7 @@
 				templateUrl: 'plugins/templates/redmine-issues-list.html',
 				scope:       {
 					statusId:         '@statusId',
-					titleSuffix:      '@titleSuffix',
+					statusTitle:      '@statusTitle',
 					count:            '@count',
 					orderBy:          '@orderBy',
 					reverseStr:       '@reverse',

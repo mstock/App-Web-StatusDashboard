@@ -58,8 +58,7 @@
 				replace:     false,
 				templateUrl: 'app/templates/status-display.html',
 				scope:       {
-					titlePrefix: '@titlePrefix',
-					titleSuffix: '@titleSuffix',
+					statusTitle: '@statusTitle',
 					statusId:    '@statusId'
 				},
 				transclude:  true

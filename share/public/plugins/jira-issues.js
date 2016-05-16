@@ -87,7 +87,7 @@
 				templateUrl: 'plugins/templates/jira-issues.html',
 				scope:       {
 					statusId:    '@statusId',
-					titleSuffix: '@titleSuffix'
+					statusTitle: '@statusTitle'
 				}
 			}
 		}

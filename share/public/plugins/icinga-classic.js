@@ -46,7 +46,7 @@
 				templateUrl: 'plugins/templates/icinga-classic.html',
 				scope:       {
 					statusId:    '@statusId',
-					titleSuffix: '@titleSuffix'
+					statusTitle: '@statusTitle'
 				}
 			}
 		}
