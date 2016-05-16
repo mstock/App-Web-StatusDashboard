@@ -44,8 +44,14 @@ sub startup {
 	}
 
 	my $share_dir = eval { File::ShareDir::dist_dir('App-Web-StatusDashboard') } // 'share';
-	$self->renderer()->paths([catdir($share_dir, 'templates')]);
-	$self->static()->paths([catdir($share_dir, 'public')]);
+	$self->renderer()->paths([
+		@{$config->{template_paths} // []},
+		catdir($share_dir, 'templates')
+	]);
+	$self->static()->paths([
+		@{$config->{static_paths} // []},
+		catdir($share_dir, 'public')
+	]);
 
 	my @dashboard_dirs = grep { -d $_ } map {
 		catdir($_, 'dashboards')
