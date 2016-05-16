@@ -106,4 +106,16 @@ sub log_update_error {
 }
 
 
+=head2 has_js
+
+Static method to indicate if this plugin has a JavaScript resource. Defaults to
+<code>1</code>. Override and return C<0> if your plugin has no such resource.
+
+=cut
+
+sub has_js {
+	return 1;
+}
+
+
 1;
