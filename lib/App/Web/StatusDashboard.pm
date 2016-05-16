@@ -16,6 +16,7 @@ use File::Spec::Functions qw(catdir);
 has 'status' => sub { return {} };
 has 'websocket_clients' => sub { return {} };
 has 'status_plugins' => sub { return {} };
+has 'status_plugins_by_id' => sub { return {} };
 has 'dashboards' => sub { return [] };
 
 =head2 startup
@@ -41,6 +42,7 @@ sub startup {
 	for my $plugin ($self->_load_plugins($config)) {
 		$plugin->init();
 		push @{$self->status_plugins()->{ref $plugin} //= []}, $plugin;
+		$self->status_plugins_by_id()->{$plugin->id()} = $plugin;
 	}
 
 	my $share_dir = eval { File::ShareDir::dist_dir('App-Web-StatusDashboard') } // 'share';
@@ -136,6 +138,19 @@ sub update_status {
 	}
 
 	return;
+}
+
+
+=head2 get_plugin
+
+Get plugin with the given id.
+
+=cut
+
+sub get_plugin {
+	my ($self, $id) = @_;
+
+	return $self->status_plugins_by_id()->{$id};
 }
 
 
