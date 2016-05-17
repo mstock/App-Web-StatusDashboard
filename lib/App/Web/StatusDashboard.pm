@@ -5,6 +5,7 @@ use Mojo::Base 'Mojolicious';
 # ABSTRACT: Mojolicious-based status dashboard application
 
 use Mojo::IOLoop;
+use Mojo::EventEmitter;
 use Class::Load qw(load_class);
 use DateTime;
 use Test::Deep::NoTest;
@@ -18,6 +19,7 @@ has 'websocket_clients' => sub { return {} };
 has 'status_plugins' => sub { return {} };
 has 'status_plugins_by_id' => sub { return {} };
 has 'dashboards' => sub { return [] };
+has 'event_emitter' => sub { Mojo::EventEmitter->new() };
 
 =head2 startup
 
@@ -128,13 +130,15 @@ sub update_status {
 			last_updated => DateTime->now->strftime('%Y%m%dT%H%M%S%z'),
 		};
 		$self->status()->{$status_id} = $new_status;
+		my $data = {
+			$status_id => $new_status,
+		};
 		for my $client (values %{$self->websocket_clients()}) {
 			$client->send({
-				json => {
-					$status_id => $new_status,
-				},
+				json => $data,
 			});
 		}
+		$self->event_emitter->emit(status_update => $data);
 	}
 
 	return;
