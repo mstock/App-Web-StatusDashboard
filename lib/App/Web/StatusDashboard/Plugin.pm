@@ -7,6 +7,7 @@ use Mojo::Base -base;
 use Carp;
 use Mojo::UserAgent;
 use Log::Any qw($log);
+use List::MoreUtils qw(any);
 
 has 'dashboard';
 has 'id';
@@ -99,6 +100,36 @@ sub short_name {
 	my ($plugin_name) = $class =~ m{::(\w+)$};
 	my @parts = $plugin_name =~ m{([A-Z]?[a-z0-9]+)}g;
 	return join('-', map { lc } @parts);
+}
+
+
+=head2 transactions_ok
+
+Check if any transaction response contains a non-HTTP-success status and throw
+an exception in this case. If there is no reponse code (which can happen on event
+loop resets), return false.
+
+=head3 Result
+
+C<1> on success, C<0> if status is unknown, an exception on non-HTTP-success.
+
+=cut
+
+sub transactions_ok {
+	my ($self, @transactions) = @_;
+
+	# Event loop reset?
+	if (any { ! defined $_->res()->code() && defined $_->{http_state} } @transactions) {
+		return 0;
+	}
+
+	# HTTP non-200 status?
+	my @errors = grep { ! $_->res()->is_status_class(200) } @transactions;
+	if (scalar @errors) {
+		die [ map { $_->error() } @errors ];
+	}
+
+	return 1;
 }
 
 
