@@ -25,5 +25,10 @@ is(
 	'foo-bar20',
 	'short name ok'
 );
+is(
+	App::Web::StatusDashboard::Plugin::short_name('StatusDashboard::Plugin::CalDAV'),
+	'cal-d-a-v',
+	'short name ok'
+);
 
 done_testing();

@@ -98,8 +98,8 @@ sub short_name {
 
 	my $class = ref $self || $self;
 	my ($plugin_name) = $class =~ m{::(\w+)$};
-	my @parts = $plugin_name =~ m{([A-Z]?[a-z0-9]+)}g;
-	return join('-', map { lc } @parts);
+	my @parts = $plugin_name =~ m{([A-Z]?[a-z0-9]*)}g;
+	return join('-', map { lc } grep { $_ ne '' } @parts);
 }
 
 
