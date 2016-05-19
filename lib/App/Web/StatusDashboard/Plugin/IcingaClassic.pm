@@ -36,10 +36,12 @@ sub update {
 		},
 		sub {
 			my ($delay, $hostdetail, $servicedetail) = @_;
-			$self->update_status({
-				services => $servicedetail->res->json(),
-				hosts    => $hostdetail->res->json()
-			});
+			if ($self->transactions_ok($hostdetail, $servicedetail)) {
+				$self->update_status({
+					services => $servicedetail->res->json(),
+					hosts    => $hostdetail->res->json()
+				});
+			}
 		}
 	)->catch(sub {
 		my ($delay, $err) = @_;

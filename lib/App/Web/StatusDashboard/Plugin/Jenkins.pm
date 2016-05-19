@@ -35,10 +35,12 @@ sub update {
 		},
 		sub {
 			my ($delay, $executors, $jobs) = @_;
-			$self->update_status({
-				executors => $executors->res->json(),
-				jobs      => $jobs->res->json()->{jobs}
-			});
+			if ($self->transactions_ok($executors, $jobs)) {
+				$self->update_status({
+					executors => $executors->res->json(),
+					jobs      => $jobs->res->json()->{jobs}
+				});
+			}
 		}
 	)->catch(sub {
 		my ($delay, $err) = @_;

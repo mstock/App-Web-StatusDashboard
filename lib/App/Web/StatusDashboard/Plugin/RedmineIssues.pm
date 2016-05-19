@@ -31,24 +31,28 @@ sub update {
 		},
 		sub {
 			my ($delay, $basic) = @_;
-			my $total = $basic->res->json()->{total_count};
-			my $offset = 0;
-			my $limit = 50;
-			while ($offset < $total) {
-				$self->ua()->get(
-					$url->clone()->query([
-						limit  => $limit,
-						offset => $offset,
-					]) => $delay->begin()
-				);
-				$offset = $offset + $limit;
+			if ($self->transactions_ok($basic)) {
+				my $total = $basic->res()->json()->{total_count};
+				my $offset = 0;
+				my $limit = 50;
+				while ($offset < $total) {
+					$self->ua()->get(
+						$url->clone()->query([
+							limit  => $limit,
+							offset => $offset,
+						]) => $delay->begin()
+					);
+					$offset = $offset + $limit;
+				}
 			}
 		},
 		sub {
 			my ($delay, @responses) = @_;
-			$self->update_status([
-				map { @{$_->res->json()->{issues}} } @responses
-			]);
+			if ($self->transactions_ok(@responses)) {
+				$self->update_status([
+					map { @{$_->res->json()->{issues}} } @responses
+				]);
+			}
 		}
 	)->catch(sub {
 		my ($delay, $err) = @_;

@@ -30,24 +30,28 @@ sub update {
 		},
 		sub {
 			my ($delay, $basic) = @_;
-			my $total = $basic->res->json()->{total};
-			my $start_at = 0;
-			my $max_results = 50;
-			while ($start_at < $total) {
-				$self->ua()->get(
-					$url->clone()->query([
-						maxResults => $max_results,
-						startAt    => $start_at,
-					]) => $delay->begin()
-				);
-				$start_at = $start_at + $max_results;
+			if ($self->transactions_ok($basic)) {
+				my $total = $basic->res->json()->{total};
+				my $start_at = 0;
+				my $max_results = 50;
+				while ($start_at < $total) {
+					$self->ua()->get(
+						$url->clone()->query([
+							maxResults => $max_results,
+							startAt    => $start_at,
+						]) => $delay->begin()
+					);
+					$start_at = $start_at + $max_results;
+				}
 			}
 		},
 		sub {
 			my ($delay, @responses) = @_;
-			$self->update_status([
-				map { @{$_->res->json()->{issues}} } @responses
-			]);
+			if ($self->transactions_ok(@responses)) {
+				$self->update_status([
+					map { @{$_->res->json()->{issues}} } @responses
+				]);
+			}
 		}
 	)->catch(sub {
 		my ($delay, $err) = @_;
