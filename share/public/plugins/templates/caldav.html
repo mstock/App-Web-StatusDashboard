@@ -1,0 +1,29 @@
+<status-display
+	status-title="{{ statusTitle }}"
+	status-id="{{ statusId }}"
+>
+	<table class="table" ng-if="events.length > 0 && !dayCluster">
+		<tbody>
+			<tr ng-repeat="event in events | limitTo : count || 10">
+				<td class="start" ng-if="times">{{event.start | date : dateFormat }}</td>
+				<td class="end" ng-if="times">{{event.end   | date : dateFormat }}</td>
+				<td>{{event.summary}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<dl ng-if="events.length > 0 && dayCluster">
+		<dt ng-repeat-start="(date, clusterEvents) in clusteredEvents">{{date}}</dt>
+		<dd ng-repeat-end>
+			<table class="table">
+				<tbody>
+					<tr ng-repeat="event in clusterEvents">
+						<td class="start" ng-if="times">{{event.start | date : dateFormat }}</td>
+						<td class="end" ng-if="times">{{event.end   | date : dateFormat }}</td>
+						<td>{{event.summary}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</dd>
+	</dl>
+	<span ng-if="events.length === 0">No upcoming events.</span>
+</status-display>
