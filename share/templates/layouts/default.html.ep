@@ -6,6 +6,9 @@
 		<link rel="stylesheet" type="text/css" href="<%= url_for('lib/bootstrap/dist/css/bootstrap.min.css') %>"></link>
 		<link rel="stylesheet" type="text/css" href="<%= url_for('lib/bootstrap/dist/css/bootstrap-theme.min.css') %>"></link>
 		<link rel="stylesheet" type="text/css" href="<%= url_for('app/css/app.css') %>"></link>
+		% for my $plugin (grep { $_->has_css() } keys %{app->status_plugins()}) {
+			<link rel="stylesheet" type="text/css" href="<%= url_for('/plugins/css/' . $plugin->short_name() . '.css') %>"></link>
+		% }
 	</head>
 	<body>
 		<%= content %>

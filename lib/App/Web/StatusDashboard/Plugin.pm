@@ -175,4 +175,16 @@ sub has_js {
 }
 
 
+=head2 has_css
+
+Static method to indicate if this plugin has a CSS resource. Defaults to
+<code>0</code>. Override and return C<1> if your plugin has such a resource.
+
+=cut
+
+sub has_css {
+	return 0;
+}
+
+
 1;
