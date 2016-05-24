@@ -12,10 +12,18 @@
 		'$http',
 		'$websocket',
 		'websocketUri',
-		function ($http, $websocket, websocketUri) {
+		'$log',
+		function ($http, $websocket, websocketUri, $log) {
 			var status = {};
 
 			var dataStream = $websocket(websocketUri);
+			dataStream.onError(function (error) {
+				$log.error("WebSocket error: ", error);
+			});
+			dataStream.onClose(function (message) {
+				$log.debug("Connection closed: ", message);
+				dataStream.reconnect();
+			});
 			dataStream.onMessage(function(message) {
 				var data = JSON.parse(message.data);
 				Object.keys(data).forEach(function (key) {
