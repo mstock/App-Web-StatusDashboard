@@ -19,7 +19,7 @@
 						var hostStats = {};
 						var hostStatus = {};
 						var serviceStats = {};
-						var 	serviceStatus = {};
+						var serviceStatus = {};
 						HOST_STATUSES.forEach(function (status) {
 							hostStats[status] = 0;
 							hostStatus[status] = false;
@@ -43,7 +43,7 @@
 					});
 				},
 				replace:     false,
-				templateUrl: 'plugins/templates/icinga-classic.html',
+				templateUrl: 'plugins/templates/icinga.html',
 				scope:       {
 					statusId:    '@statusId',
 					statusTitle: '@statusTitle'
