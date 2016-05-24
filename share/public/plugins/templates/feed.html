@@ -1,0 +1,16 @@
+<status-display
+	status-title="{{ statusTitle }}"
+	status-id="{{ statusId }}"
+>
+	<ul ng-repeat="item in items | limitTo : count || 10">
+		<li>
+			{{item.title}}
+			<span class="time-ago">&mdash;
+				<span
+					am-time-ago="item.issued"
+					title="{{ item.issued | date : dateFormat || 'medium' }}"
+				></span>
+			</span>
+		</li>
+	</ul>
+</status-display>
