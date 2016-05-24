@@ -19,7 +19,7 @@
 		<script type="text/javascript" src="<%= url_for('lib/angular-bootstrap/ui-bootstrap-tpls.min.js') %>"></script>
 		<script type="text/javascript" src="<%= url_for('lib/angular-messages/angular-messages.min.js') %>"></script>
 		<script type="text/javascript" src="<%= url_for('lib/angular-message-format/angular-message-format.min.js') %>"></script>
-		<script type="text/javascript" src="<%= url_for('lib/angular-websocket/angular-websocket.min.js') %>"></script>
+		<script type="text/javascript" src="<%= url_for('lib/angular-websocket/dist/angular-websocket.min.js') %>"></script>
 		<script type="text/javascript" src="<%= url_for('lib/angular-chart.js/dist/angular-chart.js') %>"></script>
 		<script type="text/javascript" src="<%= url_for('lib/angular-moment/angular-moment.min.js') %>"></script>
 		<script type="text/javascript" src="<%= url_for('app/app.js') %>"></script>
