@@ -1,0 +1,7 @@
+% layout 'default';
+% title 'Status Dashboard';
+<div class="container-fluid">
+	<div class="row">
+		<feed status-id="slashdot" status-title="Slashdot News" class="col-md-12" count="5"></feed>
+	</div>
+</div>
