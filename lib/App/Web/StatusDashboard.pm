@@ -40,7 +40,7 @@ sub startup {
 		dashboard=> 'index'
 	})->to('root#index');
 
-	my $config = $self->plugin('Config');
+	my $config = $self->plugin('Config', default => {});
 	for my $plugin ($self->_load_plugins($config)) {
 		$plugin->init();
 		push @{$self->status_plugins()->{ref $plugin} //= []}, $plugin;
