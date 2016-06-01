@@ -1,0 +1,109 @@
+% layout 'default';
+% title 'Status Dashboard';
+
+<div class="jumbotron">
+	<div class="container">
+		<h1>Status Dashboard</h1>
+		<p>
+			This is a empty example status dashboard. It can serve as a starting
+			point for setting up your own dashboards.
+		</p>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h2>Setup</h2>
+			<p>
+				In order to setup your own dashboards, you need at least two
+				files:
+			</p>
+			<ol>
+				<li>Configuration</li>
+				<li>Dashboard</li>
+			</ol>
+			<p>
+				They should be placed in a directory structure that looks as follows:
+			</p>
+			<pre>.
+|-- app-web-status_dashboard.conf
+`-- templates
+    `-- dashboards
+        `-- index.html.ep</pre>
+			<p>
+				Instead of <code>index.html.ep</code>, you can also use another
+				filename like <code>test.html.ep</code>, which will make the
+				dashboard available below <code>/test</code> instead of
+				<code>/</code> (this allows you to have multiple dashboards per
+				application instance).
+			</p>
+		</div>
+		<div class="col-md-12">
+			<h2>Configuration</h2>
+			<p>
+				The configuration file must contain a configuration for
+				<a href="https://metacpan.org/pod/Mojolicious::Plugin::Config">Mojolicious::Plugin::Config</a>,
+				i.e. a Perl data structure. It should look about as follows:
+			</p>
+			<pre>{
+    'plugins'        => {
+        'App::Web::StatusDashboard::Plugin::Feed' => {
+            'slashdot' => {
+                sources => [
+                    'http://rss.slashdot.org/Slashdot/slashdotMain'
+                ]
+            }
+        },
+        [...]
+    },
+    'template_paths' => ['templates', '&lt;path to sandbox&gt;/share/templates'],
+    'static_paths'   => ['&lt;path to sandbox&gt;/share/public']
+}</pre>
+			<p>
+				The <code>&lt;path to sandbox&gt;...</code>-part is only required when
+				running the application from Git - if run from an installed
+				version, these should be found and added automatically.
+			</p>
+			<p>
+				You can add as many plugins as you like, but the instance identifier
+				(like <code>slashdot</code>) must be unique, and will also be
+				used in the dashboard template.
+			</p>
+		</div>
+		<div class="col-md-12">
+			<h2>Dashboard</h2>
+			<p>
+				This is a normal <a href="https://metacpan.org/pod/Mojo::Template">Mojo::Template</a>-based
+				template which defines how your dashboard looks. Given the above
+				configuration, one could use a template like the following:
+			</p>
+			<pre>% layout 'default';
+% title 'Status Dashboard';
+&lt;div class="container-fluid"&gt;
+	&lt;div class="row"&gt;
+		&lt;feed status-id="slashdot" status-title="Slashdot News" class="col-md-12" count="5"&gt;&lt;/feed&gt;
+	&lt;/div&gt;
+&lt;/div&gt;</pre>
+			<p>
+				Please note the <code>% layout 'default';</code> - this provides
+				you with the 'surroundings' and will load all the required assets.
+			</p>
+		</div>
+		<div class="col-md-12">
+			<h2>Running</h2>
+			<p>
+				In order to run the status dashboard application, you can use a
+				command like the following in the directory where your
+				<code>app-web-status_dashboard.conf</code> resides (assuming you
+				run the status dashboard application from a Git sandbox, which
+				resides at <code>..</code>):
+			</p>
+			<pre>PERL5LIB=../lib MOJO_CONFIG=$PWD/app-web-status_dashboard.conf ../script/status_dashboard daemon</pre>
+			<p>
+				Your dashboard will then be available at
+				<a href="http://localhost:3000/">http://localhost:3000/</a>.
+			</p>
+		</div>
+	</div>
+</div>
