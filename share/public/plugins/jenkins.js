@@ -5,14 +5,15 @@
 		'statusService',
 		function (statusService) {
 			var jobStates = [
-				{ label: 'Successful',           color: 'blue',         renderColor: '#5CB85C' },
-				{ label: 'Successful, building', color: 'blue_anime',   renderColor: '#3CA83C' },
-				{ label: 'Unstable',             color: 'yellow',       renderColor: '#F0AD4E' },
-				{ label: 'Unstable, building',   color: 'yellow_anime', renderColor: '#D08D2E' },
-				{ label: 'Failed',               color: 'red',          renderColor: '#D9534F' },
-				{ label: 'Failed, building',     color: 'red_anime',    renderColor: '#A9332F' },
-				{ label: 'Disabled',             color: 'disabled',     renderColor: '#5BC0DE' },
-				{ label: 'Not Built',            color: 'notbuilt',     renderColor: '#DDDDDD' }
+				{ label: 'Successful',           color: 'blue',           renderColor: '#5CB85C' },
+				{ label: 'Successful, building', color: 'blue_anime',     renderColor: '#3CA83C' },
+				{ label: 'Unstable',             color: 'yellow',         renderColor: '#F0AD4E' },
+				{ label: 'Unstable, building',   color: 'yellow_anime',   renderColor: '#D08D2E' },
+				{ label: 'Failed',               color: 'red',            renderColor: '#D9534F' },
+				{ label: 'Failed, building',     color: 'red_anime',      renderColor: '#A9332F' },
+				{ label: 'Disabled',             color: 'disabled',       renderColor: '#5BC0DE' },
+				{ label: 'Not Built',            color: 'notbuilt',       renderColor: '#DDDDDD' },
+				{ label: 'Not Built, building',  color: 'notbuilt_anime', renderColor: '#BDBDBD' }
 			];
 			return {
 				restrict:    'E',
