@@ -11,7 +11,8 @@
 				{ label: 'Unstable, building',   color: 'yellow_anime', renderColor: '#D08D2E' },
 				{ label: 'Failed',               color: 'red',          renderColor: '#D9534F' },
 				{ label: 'Failed, building',     color: 'red_anime',    renderColor: '#A9332F' },
-				{ label: 'Disabled',             color: 'disabled',     renderColor: '#5BC0DE' }
+				{ label: 'Disabled',             color: 'disabled',     renderColor: '#5BC0DE' },
+				{ label: 'Not Built',            color: 'notbuilt',     renderColor: '#DDDDDD' }
 			];
 			return {
 				restrict:    'E',
