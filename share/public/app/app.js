@@ -59,7 +59,7 @@
 							if (newValue === null) {
 								return;
 							}
-							scope.lastUpdated = moment(newValue, 'YYYYMMDDTHHmmssZ');
+							scope.lastUpdated = moment(newValue);
 						}
 					);
 				},

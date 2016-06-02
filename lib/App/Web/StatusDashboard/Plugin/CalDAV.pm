@@ -24,9 +24,6 @@ has 'sources';
 has 'days' => sub { 1 };
 has 'timezone' => sub { 'local' };
 
-my $date_time_compact_format = 'yyyyMMdd\'T\'HHmmss\'Z\'';
-my $date_time_format = 'yyyy-MM-dd\'T\'HH:mm:ssZZZZZ';
-
 
 =head2 new
 
@@ -102,8 +99,8 @@ sub update {
 			for my $source (@{$self->sources() // []}) {
 				my $tx = $self->ua()->build_tx(REPORT => $source => sprintf(
 					$filter,
-					$start->format_cldr($date_time_compact_format),
-					$end->format_cldr($date_time_compact_format),
+					$self->format_timestamp_compact($start),
+					$self->format_timestamp_compact($end),
 				));
 				$self->ua()->start($tx => $delay->begin());
 			}
@@ -129,8 +126,8 @@ sub update {
 						my $event_start = $event->start()->set_time_zone('UTC');
 						my $event_end   = $event->end()->set_time_zone('UTC');
 						push @data, {
-							start   => $event_start->format_cldr($date_time_format),
-							end     => $event_end->format_cldr($date_time_format),
+							start   => $self->format_timestamp($event_start),
+							end     => $self->format_timestamp($event_end),
 							summary => $event->summary()
 						}
 					}

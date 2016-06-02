@@ -20,8 +20,6 @@ and processes them using L<XML::Feed|XML::Feed>.
 
 has 'sources';
 
-my $date_time_format = 'yyyy-MM-dd\'T\'HH:mm:ssZZZZZ';
-
 
 =head2 new
 
@@ -76,7 +74,7 @@ sub update {
 				}
 				@items = sort { $b->{issued} cmp $a->{issued} } @items;
 				for my $item (@items) {
-					$item->{issued} = $item->{issued}->format_cldr($date_time_format);
+					$item->{issued} = $self->format_timestamp($item->{issued});
 				}
 				$self->update_status(\@items);
 			}

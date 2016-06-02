@@ -8,6 +8,7 @@ use Carp;
 use Mojo::UserAgent;
 use Log::Any qw($log);
 use List::MoreUtils qw(any);
+use Scalar::Util qw(blessed);
 
 
 =head1 SYNOPSIS
@@ -42,6 +43,9 @@ has 'id';
 has 'ua' => sub {
 	return Mojo::UserAgent->new();
 };
+
+my $date_time_compact_format = 'yyyyMMdd\'T\'HHmmss\'Z\'';
+my $date_time_format = 'yyyy-MM-dd\'T\'HH:mm:ssZZZZZ';
 
 
 =head2 new
@@ -159,6 +163,51 @@ sub transactions_ok {
 	}
 
 	return 1;
+}
+
+
+=head2 format_timestamp
+
+Format a L<DateTime|DateTime> object as ISO8601 timestamp.
+
+=head3 Result
+
+The timestamp string.
+
+=cut
+
+sub format_timestamp {
+	my ($self, $timestamp) = @_;
+
+	return $self->_format_timestamp($timestamp, $date_time_format);
+}
+
+
+=head2 format_timestamp_compact
+
+Format a L<DateTime|DateTime> object as a more compact ISO8601 timestamp.
+
+=head3 Result
+
+The timestamp string.
+
+=cut
+
+sub format_timestamp_compact {
+	my ($self, $timestamp) = @_;
+
+	return $self->_format_timestamp($timestamp, $date_time_compact_format);
+}
+
+
+sub _format_timestamp {
+	my ($self, $timestamp, $format) = @_;
+
+	unless (blessed $timestamp && $timestamp->isa('DateTime')) {
+		croak("Required 'timestamp' parameter not passed or not a 'DateTime' instance");
+	}
+
+	return $timestamp->format_cldr($format);
 }
 
 

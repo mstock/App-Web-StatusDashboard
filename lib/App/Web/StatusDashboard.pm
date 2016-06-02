@@ -13,6 +13,7 @@ use Log::Any qw($log);
 use Log::Any::Adapter;
 use File::ShareDir;
 use File::Spec::Functions qw(catdir);
+use App::Web::StatusDashboard::Plugin;
 
 
 =head1 SYNOPSIS
@@ -155,7 +156,9 @@ sub update_status {
 	if (!eq_deeply($self->status()->{$status_id}->{data}, $status)) {
 		my $new_status = {
 			data         => $status,
-			last_updated => DateTime->now->strftime('%Y%m%dT%H%M%S%z'),
+			last_updated => App::Web::StatusDashboard::Plugin->format_timestamp(
+				DateTime->now()
+			),
 		};
 		$self->status()->{$status_id} = $new_status;
 		my $data = {
