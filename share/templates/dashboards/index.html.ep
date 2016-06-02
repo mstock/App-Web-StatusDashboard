@@ -50,6 +50,7 @@
     'plugins'        => {
         'App::Web::StatusDashboard::Plugin::Feed' => {
             'slashdot' => {
+                # Data that will be passed to the plugin constructor
                 sources => [
                     'http://rss.slashdot.org/Slashdot/slashdotMain'
                 ]

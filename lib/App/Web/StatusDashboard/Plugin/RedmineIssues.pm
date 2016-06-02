@@ -6,8 +6,38 @@ use Mojo::Base 'App::Web::StatusDashboard::PollingPlugin';
 
 use Mojo::URL;
 
+
+=head1 DESCRIPTION
+
+App::Web::StatusDashboard::Plugin::RedmineIssues is a plugin to fetch data from
+a Redmine instance.
+
+=head1 METHODS
+
+=cut
+
+
 has 'base_url';
 
+
+=head2 new
+
+Constructor, creates new instance. See L<new|App::Web::StatusDashboard::PollingPlugin/new>
+in L<App::Web::StatusDashboard::PollingPlugin|App::Web::StatusDashboard::PollingPlugin> for
+more parameters.
+
+=head3 Parameters
+
+This method expects its parameters as a hash reference.
+
+=over
+
+=item base_url
+
+Base URL of the issues resource of your Redmine API. You can also apply
+filters to the issues if you're only interested in a subset.
+
+=back
 
 =head2 update
 

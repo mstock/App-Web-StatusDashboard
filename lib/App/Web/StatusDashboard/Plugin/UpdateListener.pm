@@ -7,7 +7,19 @@ use Mojo::Base 'App::Web::StatusDashboard::Plugin';
 use MRO::Compat;
 use List::MoreUtils qw(natatime);
 
+
+=head1 DESCRIPTION
+
+App::Web::StatusDashboard::Plugin::UpdateListener is a plugin to listen for
+status updates in the dashboard.
+
+=head1 METHODS
+
+=cut
+
+
 has 'listeners' => sub { {} };
+
 
 =head2 new
 
@@ -23,7 +35,7 @@ This method expects its parameters as a hash reference.
 
 =item listeners
 
-Array reference with status ids at uneven positions and code references at even
+Array reference with status ids at even positions and code references at uneven
 positions. The code references will be called if the corresponding status was
 updated.
 

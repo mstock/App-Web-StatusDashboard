@@ -7,8 +7,36 @@ use Mojo::Base 'App::Web::StatusDashboard::PollingPlugin';
 use Mojo::URL;
 use Mojo::Util qw(b64_encode);
 
+
+=head1 DESCRIPTION
+
+App::Web::StatusDashboard::Plugin::Picture is a plugin to fetch a picture.
+
+=head1 METHODS
+
+=cut
+
+
 has 'url';
 
+
+=head2 new
+
+Constructor, creates new instance. See L<new|App::Web::StatusDashboard::PollingPlugin/new>
+in L<App::Web::StatusDashboard::PollingPlugin|App::Web::StatusDashboard::PollingPlugin> for
+more parameters.
+
+=head3 Parameters
+
+This method expects its parameters as a hash reference.
+
+=over
+
+=item url
+
+URL of the picture you want to display.
+
+=back
 
 =head2 update
 
@@ -49,9 +77,13 @@ sub update {
 }
 
 
-sub has_css {
-	my ($self) = @_;
+=head2 has_css
 
+Specialized method to indicate that this plugin has CSS resources.
+
+=cut
+
+sub has_css {
 	return 1;
 }
 

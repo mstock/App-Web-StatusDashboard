@@ -6,8 +6,36 @@ use Mojo::Base 'App::Web::StatusDashboard::PollingPlugin';
 
 use Mojo::URL;
 
+
+=head1 DESCRIPTION
+
+App::Web::StatusDashboard::Plugin::IcingaClassic is a plugin to fetch data from
+an IcingaClassic instance.
+
+=head1 METHODS
+
+=cut
+
+
 has 'base_url';
 
+=head2 new
+
+Constructor, creates new instance. See L<new|App::Web::StatusDashboard::PollingPlugin/new>
+in L<App::Web::StatusDashboard::PollingPlugin|App::Web::StatusDashboard::PollingPlugin> for
+more parameters.
+
+=head3 Parameters
+
+This method expects its parameters as a hash reference.
+
+=over
+
+=item base_url
+
+Base URL of your IcingaClassic instance, usually the C<status.cgi> URL.
+
+=back
 
 =head2 update
 

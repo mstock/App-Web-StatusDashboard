@@ -6,6 +6,15 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use Log::Any qw($log);
 
+
+=head1 DESCRIPTION
+
+App::Web::StatusDashboard::Controller::Status provides a resource to fetch the
+current status information as JSON, and a websocket endpoint to get notified
+with status updates.
+
+=head1 METHODS
+
 =head2 status
 
 Simple resource that returns the current status in JSON format.

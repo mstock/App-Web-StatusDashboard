@@ -6,9 +6,17 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use File::Spec::Functions qw(catfile);
 
+
+=head1 DESCRIPTION
+
+App::Web::StatusDashboard::Controller::Root is the root controller of the
+application which handles requests to C</> and C</config>.
+
+=head1 METHODS
+
 =head2 index
 
-Provide HTML for the document root.
+Provide dashboard HTML for the document root or the selected dashboard.
 
 =cut
 
@@ -37,7 +45,8 @@ sub index {
 
 =head2 config
 
-Provide configuration values for the application.
+Provide configuration values for the application, as a JavaScript file that
+can be included.
 
 =cut
 

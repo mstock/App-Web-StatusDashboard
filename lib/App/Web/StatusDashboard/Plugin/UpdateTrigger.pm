@@ -8,8 +8,26 @@ use MRO::Compat;
 use Scalar::Util qw(blessed);
 use List::MoreUtils qw(any);
 
+
+=head1 DESCRIPTION
+
+App::Web::StatusDashboard::Plugin::UpdateTrigger is a plugin to trigger updates
+in other plugins based on received C<POST> requests.
+
+In order to trigger and update, one has the send a C<POST> request to a URL like
+the following:
+
+	http://<dashboard-server>/plugin/update-trigger/<trigger plugin id>/<plugin id>? \
+		token=<some token if configured>
+
+=head1 METHODS
+
+=cut
+
+
 has 'update_ids' => sub { [] };
 has 'token' => sub { };
+
 
 =head2 new
 

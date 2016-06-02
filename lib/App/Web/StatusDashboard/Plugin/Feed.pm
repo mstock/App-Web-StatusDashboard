@@ -7,9 +7,40 @@ use Mojo::Base 'App::Web::StatusDashboard::PollingPlugin';
 use Mojo::URL;
 use XML::Feed;
 
+
+=head1 DESCRIPTION
+
+App::Web::StatusDashboard::Plugin::Feed retrieves data from RSS/ATOM etc. feeds,
+and processes them using L<XML::Feed|XML::Feed>.
+
+=head1 METHODS
+
+=cut
+
+
 has 'sources';
 
 my $date_time_format = 'yyyy-MM-dd\'T\'HH:mm:ssZZZZZ';
+
+
+=head2 new
+
+Constructor, creates new instance. See L<new|App::Web::StatusDashboard::PollingPlugin/new>
+in L<App::Web::StatusDashboard::PollingPlugin|App::Web::StatusDashboard::PollingPlugin> for
+more parameters.
+
+=head3 Parameters
+
+This method expects its parameters as a hash reference.
+
+=over
+
+=item sources
+
+Array reference with feed URLs from where data should be retrieved. The feeds
+will be merged together and sorted by date.
+
+=back
 
 =head2 update
 
@@ -59,9 +90,13 @@ sub update {
 }
 
 
-sub has_css {
-	my ($self) = @_;
+=head2 has_css
 
+Specialized method to indicate that this plugin has CSS resources.
+
+=cut
+
+sub has_css {
 	return 1;
 }
 

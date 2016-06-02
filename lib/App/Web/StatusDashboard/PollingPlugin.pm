@@ -10,7 +10,34 @@ use Mojo::IOLoop;
 use Mojo::UserAgent;
 use Log::Any qw($log);
 
+
+=head1 SYNOPSIS
+
+	package My::Plugin;
+
+	use Mojo::Base 'App::Web::StatusDashboard::PollingPlugin';
+
+	sub update {
+		my ($self) = @_;
+
+		...
+		$self->update_status(...);
+	}
+
+	1;
+
+=head1 DESCRIPTION
+
+App::Web::StatusDashboard::PollingPlugin can be used as a base class for plugins
+that use polling to get their data.
+
+=head1 METHODS
+
+=cut
+
+
 has 'cycle' => 60;
+
 
 =head2 new
 
@@ -39,7 +66,7 @@ plugin).
 =head2 init
 
 Initialize the plugin. Will start recurring calls to C<update> with the configured
-cycle.
+cycle, and already trigger a first update.
 
 =cut
 

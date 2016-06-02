@@ -14,12 +14,40 @@ use Log::Any::Adapter;
 use File::ShareDir;
 use File::Spec::Functions qw(catdir);
 
+
+=head1 SYNOPSIS
+
+When running from Git:
+
+	./script/status_dashboard daemon
+
+When running from the installed distribution:
+
+	status_dashboard daemon
+
+You can now open a web browser at L<http://localhost:3000> to get some basic
+instructions for setting up your own dashboard.
+
+=head1 DESCRIPTION
+
+App::Web::StatusDashboard is a L<Mojolicious|Mojolicious>-based micro-framework
+to build status dashboards. The backend provides a plugin infrastructure which
+should make it easy to add additional plugins that prepare and/or fetch status
+data from various systems and sources, and the AngularJS-based frontend provides
+directives for the included plugins to visualize their data.
+
+=head1 METHODS
+
+=cut
+
+
 has 'status' => sub { return {} };
 has 'websocket_clients' => sub { return {} };
 has 'status_plugins' => sub { return {} };
 has 'status_plugins_by_id' => sub { return {} };
 has 'dashboards' => sub { return [] };
 has 'event_emitter' => sub { Mojo::EventEmitter->new() };
+
 
 =head2 startup
 
@@ -109,7 +137,7 @@ id from the configuration.
 
 =item status
 
-Hash reference with the latest status object.
+Hash reference with the latest status data.
 
 =back
 
@@ -219,6 +247,106 @@ sub unregister_client {
 	delete $self->websocket_clients()->{"$tx"};
 	return;
 }
+
+
+=head1 BUNDLED FILES
+
+The L<App::Web::StatusDashboard|App::Web::StatusDashboard> distribution contains
+some files and frameworks with other licenses that were bundled for convenience.
+
+=head2 AngularJS
+
+	Copyright (c) 2010-2015 Google, Inc. http://angularjs.org
+
+Licensed under the MIT License, L<http://creativecommons.org/licenses/MIT>.
+
+=head2 Angular-Bootstrap
+
+	Copyright (c) L<https://github.com/angular-ui/bootstrap/graphs/contributors>
+
+Licensed under the MIT License, L<http://creativecommons.org/licenses/MIT>.
+
+=head2 Angular-Chart.js
+
+	Copyright (c) 2013-2015 Nick Downie
+
+Licensed under the MIT License, L<http://creativecommons.org/licenses/MIT>.
+
+=head2 Angular-Message-Format
+
+	Copyright (c) 2010-2015 Google, Inc. http://angularjs.org
+
+Licensed under the MIT License, L<http://creativecommons.org/licenses/MIT>.
+
+=head2 Angular-Messages
+
+	Copyright (c) 2010-2015 Google, Inc. http://angularjs.org
+
+Licensed under the MIT License, L<http://creativecommons.org/licenses/MIT>.
+
+=head2 Angular-Moment
+
+	Copyright (c) 2013-2016 Uri Shaked and contributors
+
+Licensed under the MIT License, L<http://creativecommons.org/licenses/MIT>.
+
+=head2 Angular-Route
+
+	Copyright (c) 2010-2015 Google, Inc. http://angularjs.org
+
+Licensed under the MIT License, L<http://creativecommons.org/licenses/MIT>.
+
+=head2 Angular-Websocket
+
+	Copyright (c) 2013-2016 Patrick Stapleton, gdi2290, PatrickJS
+
+Licensed under the MIT License, L<http://creativecommons.org/licenses/MIT>.
+
+=head2 Bootstrap
+
+	Copyright (c) L<https://github.com/angular-ui/bootstrap/graphs/contributors>
+
+Licensed under the MIT License, L<http://creativecommons.org/licenses/MIT>.
+
+=head2 Chart.js
+
+	Copyright (c) 2013-2015 Nick Downie
+
+Licensed under the MIT License, L<http://creativecommons.org/licenses/MIT>.
+
+=head2 jQuery
+
+	Copyright (c) jQuery Foundation and other contributors, https://jquery.org/
+
+Licensed under the MIT License, L<http://creativecommons.org/licenses/MIT>.
+
+=head2 Moment.js
+
+	Copyright (c) 2011-2016 Tim Wood, Iskren Chernev, Moment.js contributors
+
+Licensed under the MIT License, L<http://creativecommons.org/licenses/MIT>.
+
+=head1 SEE ALSO
+
+=over
+
+=item *
+
+L<App::Web::StatusDashboard::Plugin|App::Web::StatusDashboard::Plugin> - base
+class for plugins.
+
+=item *
+
+L<App::Web::StatusDashboard::PollingPlugin|App::Web::StatusDashboard::PollingPlugin>
+- base class for plugins that retrieve their data through polling.
+
+=item *
+
+C<App::Web::StatusDashboard::Plugin::*> - included plugins.
+
+=back
+
+=cut
 
 
 1;

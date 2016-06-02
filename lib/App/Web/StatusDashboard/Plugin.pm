@@ -9,12 +9,40 @@ use Mojo::UserAgent;
 use Log::Any qw($log);
 use List::MoreUtils qw(any);
 
+
+=head1 SYNOPSIS
+
+	package My::Plugin;
+
+	use Mojo::Base 'App::Web::StatusDashboard::Plugin';
+	use MRO::Compat;
+
+	sub init {
+		my ($self, @arg) = @_;
+
+		...
+
+		return $self->next::method(@arg);
+	}
+
+	1;
+
+=head1 DESCRIPTION
+
+App::Web::StatusDashboard::Plugin is a base class for plugins. It provides some
+utility functions which can be useful when implementing a plugin.
+
+=head1 METHODS
+
+=cut
+
+
 has 'dashboard';
 has 'id';
-has 'cycle' => 60;
 has 'ua' => sub {
 	return Mojo::UserAgent->new();
 };
+
 
 =head2 new
 
@@ -45,7 +73,8 @@ created if not passed.
 
 =head2 init
 
-Initialize the plugin.
+Initialize the plugin. Will be called by the status dashboard after the plugin
+has been instantiated.
 
 =cut
 

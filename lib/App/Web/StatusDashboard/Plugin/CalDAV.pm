@@ -9,6 +9,17 @@ use DateTime;
 use Data::ICal::DateTime;
 use Mojo::IOLoop::ForkCall;
 
+
+=head1 DESCRIPTION
+
+App::Web::StatusDashboard::Plugin::CalDAV retrieves events from a C<CalDAV>
+server.
+
+=head1 METHODS
+
+=cut
+
+
 has 'sources';
 has 'days' => sub { 1 };
 has 'timezone' => sub { 'local' };
@@ -16,10 +27,11 @@ has 'timezone' => sub { 'local' };
 my $date_time_compact_format = 'yyyyMMdd\'T\'HHmmss\'Z\'';
 my $date_time_format = 'yyyy-MM-dd\'T\'HH:mm:ssZZZZZ';
 
+
 =head2 new
 
-Constructor, creates new instance. See L<new|App::Web::StatusDashboard::Plugin/new>
-in L<App::Web::StatusDashboard::Plugin|App::Web::StatusDashboard::Plugin> for
+Constructor, creates new instance. See L<new|App::Web::StatusDashboard::PollingPlugin/new>
+in L<App::Web::StatusDashboard::PollingPlugin|App::Web::StatusDashboard::PollingPlugin> for
 more parameters.
 
 =head3 Parameters
@@ -31,6 +43,7 @@ This method expects its parameters as a hash reference.
 =item sources
 
 Array reference with CalDAV URLs from where calendar data should be retrieved.
+The calendars events will be merged together and sorted by date.
 
 =item days
 
@@ -190,9 +203,13 @@ sub _clean_entry {
 }
 
 
-sub has_css {
-	my ($self) = @_;
+=head2 has_css
 
+Specialized method to indicate that this plugin has CSS resources.
+
+=cut
+
+sub has_css {
 	return 1;
 }
 
