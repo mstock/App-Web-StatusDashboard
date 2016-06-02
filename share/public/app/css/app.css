@@ -10,3 +10,11 @@ h1 {
 status-display ng-transclude {
 	display: block;
 }
+
+clock .clock {
+	font-size: 2em;
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}

@@ -72,5 +72,23 @@
 				transclude:  true
 			}
 		}
+	]).directive('clock', [
+		'$interval',
+		function ($interval) {
+			return {
+				restrict:    'E',
+				link:        function (scope, element, attrs) {
+					$interval(function () {
+						scope.now = new Date();
+					}, 1000);
+				},
+				replace:     false,
+				templateUrl: 'app/templates/clock.html',
+				scope:       {
+					statusTitle: '@statusTitle',
+					dateFormat:  '@dateFormat'
+				}
+			}
+		}
 	]);
 })();
