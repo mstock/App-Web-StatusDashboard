@@ -13,6 +13,9 @@ use Log::Any qw($log);
 use Log::Any::Adapter;
 use File::ShareDir;
 use File::Spec::Functions qw(catdir);
+use Path::Tiny;
+use Set::Tiny;
+use List::Util qw(first);
 use App::Web::StatusDashboard::Plugin;
 
 
@@ -48,6 +51,7 @@ has 'status_plugins' => sub { return {} };
 has 'status_plugins_by_id' => sub { return {} };
 has 'dashboards' => sub { return [] };
 has 'event_emitter' => sub { Mojo::EventEmitter->new() };
+has 'locales' => sub { return [] };
 
 
 =head2 startup
@@ -85,6 +89,7 @@ sub startup {
 		@{$config->{static_paths} // []},
 		catdir($share_dir, 'public')
 	]);
+	$self->_init_locales();
 
 	my @dashboard_dirs = grep { -d $_ } map {
 		catdir($_, 'dashboards')
@@ -118,6 +123,43 @@ sub _load_plugins {
 	}
 
 	return @plugins;
+}
+
+
+sub _init_locales {
+	my ($self) = @_;
+
+	my $angular_locales = $self->_find_locales(
+		['lib', 'angular-i18n'], qr{^angular-locale_([\w-]+)\.js$}
+	);
+	my $moment_locales = $self->_find_locales(
+		['lib', 'moment', 'locale'], qr{^([\w-]+)\.js$}
+	);
+
+	$self->locales([
+		$angular_locales->intersection($moment_locales)->members()
+	]);
+	return;
+}
+
+
+sub _find_locales {
+	my ($self, $subdir, $filter) = @_;
+
+	my $path = first { -d $_ } map {
+		path($_)->child(@{$subdir})
+	} (@{$self->static()->paths()});
+
+	unless (defined $path) {
+		die('Location for ' . join('/', @{$subdir}) . ' not found');
+	}
+
+	return Set::Tiny->new(
+		map {
+			my ($locale) = $_->basename() =~ m{$filter};
+			$locale
+		} $path->children($filter)
+	);
 }
 
 
@@ -272,6 +314,12 @@ Licensed under the MIT License, L<http://creativecommons.org/licenses/MIT>.
 =head2 Angular-Chart.js
 
 	Copyright (c) 2013-2015 Nick Downie
+
+Licensed under the MIT License, L<http://creativecommons.org/licenses/MIT>.
+
+=head2 Angular-I18n
+
+	Copyright (c) 2016 Angular
 
 Licensed under the MIT License, L<http://creativecommons.org/licenses/MIT>.
 

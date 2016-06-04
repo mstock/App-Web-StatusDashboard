@@ -5,6 +5,7 @@ use Mojo::Base 'Mojolicious::Controller';
 # ABSTRACT: Basic root controller which provides root HTML and configuration
 
 use File::Spec::Functions qw(catfile);
+use HTTP::AcceptLanguage;
 
 
 =head1 DESCRIPTION
@@ -27,11 +28,16 @@ sub index {
 		$self->param('dashboard') eq $_
 	} @{$self->app()->dashboards()};
 
+	my $language = HTTP::AcceptLanguage->new(
+		$self->req()->headers()->accept_language()
+	)->match(@{$self->app()->locales()}) // 'en';
+
 	if (defined $dashboard) {
 		$self->render(
 			template => catfile('dashboards', $dashboard),
 			format   => 'html',
-			handler  => 'ep'
+			handler  => 'ep',
+			language => $language
 		);
 	}
 	else {
