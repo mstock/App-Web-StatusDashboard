@@ -18,3 +18,11 @@ clock .clock {
 	align-items: center;
 	justify-content: center;
 }
+
+countdown .countdown-container {
+	font-size: 2em;
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}

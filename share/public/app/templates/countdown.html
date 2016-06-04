@@ -1,0 +1,8 @@
+<h1 ng-if="statusTitle">{{statusTitle}}</h1>
+<div
+	class="countdown-container"
+	title="{{ countdownTimestamp | date : dateFormat || 'medium' }}"
+>
+	<span ng-if="countdownPrefix">{{countdownPrefix}}&nbsp;</span>
+	<span class="countdown" am-time-ago="countdownTimestamp"></span>
+</div>

@@ -90,5 +90,20 @@
 				}
 			}
 		}
+	]).directive('countdown', [
+		function () {
+			return {
+				restrict:    'E',
+				link:        function (scope, element, attrs) {},
+				replace:     false,
+				templateUrl: 'app/templates/countdown.html',
+				scope:       {
+					statusTitle:        '@statusTitle',
+					dateFormat:         '@dateFormat',
+					countdownPrefix:    '@countdownPrefix',
+					countdownTimestamp: '@countdownTimestamp',
+				}
+			}
+		}
 	]);
 })();
