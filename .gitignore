@@ -2,3 +2,5 @@
 /app-web-status_dashboard.conf
 /node_modules
 .*.swp
+/.prove
+/.build
