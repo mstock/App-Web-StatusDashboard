@@ -1,5 +1,8 @@
 #!/usr/bin/env perl
 
+# ABSTRACT: Mojolicious application commands for App::Web::StatusDashboard
+# PODNAME: status-dashboard
+
 use strict;
 use warnings;
 
