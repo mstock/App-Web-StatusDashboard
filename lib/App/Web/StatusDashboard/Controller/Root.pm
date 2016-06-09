@@ -15,13 +15,13 @@ application which handles requests to C</> and C</config>.
 
 =head1 METHODS
 
-=head2 index
+=head2 dashboard
 
 Provide dashboard HTML for the document root or the selected dashboard.
 
 =cut
 
-sub index {
+sub dashboard {
 	my ($self) = @_;
 
 	my ($dashboard) = grep {

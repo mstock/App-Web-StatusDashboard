@@ -4,6 +4,7 @@ use Mojo::Base 'App::Web::StatusDashboard::PollingPlugin';
 
 # ABSTRACT: Simple plugin to fetch a picture
 
+use Carp;
 use Mojo::URL;
 use Mojo::Util qw(b64_encode);
 
@@ -57,10 +58,10 @@ sub update {
 			if ($self->transactions_ok($tx)) {
 				my $content_type = $tx->res()->headers()->content_type();
 				unless (defined $content_type) {
-					die('No content type in response');
+					confess('No content type in response');
 				}
-				unless ($content_type =~ m{^image/\w+$}) {
-					die('Unsupported content type ' . $content_type . ' in response');
+				unless ($content_type =~ m{^image/\w+$}x) {
+					confess('Unsupported content type ' . $content_type . ' in response');
 				}
 				$self->update_status({
 					data => 'data:' . $content_type . ';base64,'

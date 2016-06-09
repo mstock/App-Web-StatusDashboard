@@ -130,8 +130,8 @@ sub short_name {
 	my ($self) = @_;
 
 	my $class = ref $self || $self;
-	my ($plugin_name) = $class =~ m{::(\w+)$};
-	my @parts = $plugin_name =~ m{([A-Z]?[a-z0-9]*)}g;
+	my ($plugin_name) = $class =~ m{::(\w+)$}x;
+	my @parts = $plugin_name =~ m{([A-Z]?[a-z0-9]*)}gx;
 	return join('-', map { lc } grep { $_ ne '' } @parts);
 }
 
@@ -159,7 +159,7 @@ sub transactions_ok {
 	# HTTP non-200 status?
 	my @errors = grep { ! $_->res()->is_status_class(200) } @transactions;
 	if (scalar @errors) {
-		die [ map { $_->error() } @errors ];
+		confess([ map { $_->error() } @errors ]);
 	}
 
 	return 1;

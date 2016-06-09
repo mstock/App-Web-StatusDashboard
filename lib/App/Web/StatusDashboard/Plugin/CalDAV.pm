@@ -4,6 +4,7 @@ use Mojo::Base 'App::Web::StatusDashboard::PollingPlugin';
 
 # ABSTRACT: Plugin to fetch data from CalDAV calendar
 
+use Carp;
 use Mojo::URL;
 use DateTime;
 use Data::ICal::DateTime;
@@ -59,7 +60,8 @@ Update the status in the dashboard.
 
 =cut
 
-my $filter = q{<?xml version="1.0"?>
+my $filter = <<'EOFILTER';
+<?xml version="1.0"?>
 <c:calendar-query xmlns:c="urn:ietf:params:xml:ns:caldav">
 	<d:prop xmlns:d="DAV:">
 		<d:getetag/>
@@ -73,7 +75,7 @@ my $filter = q{<?xml version="1.0"?>
 		</c:comp-filter>
 	</c:filter>
 </c:calendar-query>
-};
+EOFILTER
 
 sub update {
 	my ($self) = @_;
@@ -108,8 +110,7 @@ sub update {
 		sub {
 			my ($delay, @transactions) = @_;
 
-			my $fc = Mojo::IOLoop::ForkCall->new;
-			$fc->run(
+			Mojo::IOLoop::ForkCall->new()->run(
 				sub {
 					my @data;
 					my $ical_data = $self->_extract_ical_data(@transactions);
@@ -120,7 +121,7 @@ sub update {
 						data => $ical_data
 					);
 					unless ($calendar) {
-						die $calendar->error_message();
+						confess($calendar->error_message());
 					}
 					for my $event ($calendar->events($span, 'day')) {
 						my $event_start = $event->start()->set_time_zone('UTC');
@@ -138,7 +139,7 @@ sub update {
 				sub {
 					my ($fc, $err, $data) = @_;
 					if ($err) {
-						die $err
+						confess($err)
 					}
 					$self->update_status($data);
 				}
@@ -179,7 +180,7 @@ sub _extract_ical_data {
 sub _clean_entry {
 	my ($self, $entry) = @_;
 
-	my @lines = split(/(?:\r\n|\n)/, $entry);
+	my @lines = split(/(?:\r\n|\n)/x, $entry);
 	my $result;
 	my $in_alarm = 0;
 	LINE: for my $line (@lines) {

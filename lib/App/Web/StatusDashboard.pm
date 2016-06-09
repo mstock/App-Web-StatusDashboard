@@ -4,6 +4,7 @@ use Mojo::Base 'Mojolicious';
 
 # ABSTRACT: Mojolicious-based status dashboard application
 
+use Carp;
 use Mojo::IOLoop;
 use Mojo::EventEmitter;
 use Class::Load qw(load_class);
@@ -42,16 +43,55 @@ directives for the included plugins to visualize their data.
 
 =head1 METHODS
 
+=head2 status
+
+Accessor for the current status. Use C<update_status()> for updating.
+
 =cut
 
-
 has 'status' => sub { return {} };
-has 'websocket_clients' => sub { return {} };
-has 'status_plugins' => sub { return {} };
-has 'status_plugins_by_id' => sub { return {} };
+
+
+=head2 dashboards
+
+Accessor for the detected dashboards.
+
+=cut
+
 has 'dashboards' => sub { return [] };
-has 'event_emitter' => sub { Mojo::EventEmitter->new() };
+
+
+=head2 locales
+
+Accessor for the detected locales.
+
+=cut
+
 has 'locales' => sub { return [] };
+
+
+=head2 event_emitter
+
+Accessor for a L<Mojo::EventEmitter|Mojo::EventEmitter> which emits
+C<status_update> events on status updates.
+
+=cut
+
+has 'event_emitter' => sub { Mojo::EventEmitter->new() };
+
+
+=head2 status_plugins
+
+Hash reference with status plugin instances. Keys are plugins classes, values
+are array references with corresponding plugin instances.
+
+=cut
+
+has 'status_plugins' => sub { return {} };
+
+
+has '_websocket_clients' => sub { return {} };
+has '_status_plugins_by_id' => sub { return {} };
 
 
 =head2 startup
@@ -71,13 +111,13 @@ sub startup {
 	$r->websocket('/status/ws')->to('status#statuswsinit');
 	$r->get('/:dashboard' => {
 		dashboard=> 'index'
-	})->to('root#index');
+	})->to('root#dashboard');
 
 	my $config = $self->plugin('Config', default => {});
 	for my $plugin ($self->_load_plugins($config)) {
 		$plugin->init();
 		push @{$self->status_plugins()->{ref $plugin} //= []}, $plugin;
-		$self->status_plugins_by_id()->{$plugin->id()} = $plugin;
+		$self->_status_plugins_by_id()->{$plugin->id()} = $plugin;
 	}
 
 	my $share_dir = eval { File::ShareDir::dist_dir('App-Web-StatusDashboard') } // 'share';
@@ -95,15 +135,16 @@ sub startup {
 		catdir($_, 'dashboards')
 	} @{$self->renderer()->paths()};
 	for my $dashboard_dir (@dashboard_dirs) {
-		opendir(my $dirh, $dashboard_dir) or die('Could not open '
+		opendir(my $dirh, $dashboard_dir) or confess('Could not open '
 			. $dashboard_dir . ': ' . $!);
 		while (my $candidate = readdir($dirh)) {
-			if (my ($dashboard_name) = $candidate =~ m{^([\w_-]+)\.html\.ep$}) {
+			if (my ($dashboard_name) = $candidate =~ m{^([\w_-]+)\.html\.ep$}x) {
 				push @{$self->dashboards()}, $dashboard_name;
 			}
 		}
 		closedir($dirh);
 	}
+	return;
 }
 
 
@@ -114,7 +155,7 @@ sub _load_plugins {
 	for my $plugin_class (keys %{$config->{plugins}}) {
 		load_class($plugin_class);
 		for my $instance_id (keys %{$config->{plugins}->{$plugin_class}}) {
-			push @plugins, $plugin_class->new({
+			push @plugins, $plugin_class->new(+{
 				%{$config->{plugins}->{$plugin_class}->{$instance_id}},
 				id        => $instance_id,
 				dashboard => $self,
@@ -130,10 +171,10 @@ sub _init_locales {
 	my ($self) = @_;
 
 	my $angular_locales = $self->_find_locales(
-		['lib', 'angular-i18n'], qr{^angular-locale_([\w-]+)\.js$}
+		['lib', 'angular-i18n'], qr{^angular-locale_([\w-]+)\.js$}x
 	);
 	my $moment_locales = $self->_find_locales(
-		['lib', 'moment', 'locale'], qr{^([\w-]+)\.js$}
+		['lib', 'moment', 'locale'], qr{^([\w-]+)\.js$}x
 	);
 
 	$self->locales([
@@ -151,13 +192,12 @@ sub _find_locales {
 	} (@{$self->static()->paths()});
 
 	unless (defined $path) {
-		die('Location for ' . join('/', @{$subdir}) . ' not found');
+		confess('Location for ' . join('/', @{$subdir}) . ' not found');
 	}
 
 	return Set::Tiny->new(
 		map {
-			my ($locale) = $_->basename() =~ m{$filter};
-			$locale
+			($_->basename() =~ m{$filter}x)[0]
 		} $path->children($filter)
 	);
 }
@@ -206,7 +246,7 @@ sub update_status {
 		my $data = {
 			$status_id => $new_status,
 		};
-		for my $client (values %{$self->websocket_clients()}) {
+		for my $client (values %{$self->_websocket_clients()}) {
 			$client->send({
 				json => $data,
 			});
@@ -227,7 +267,7 @@ Get plugin with the given id.
 sub get_plugin {
 	my ($self, $id) = @_;
 
-	return $self->status_plugins_by_id()->{$id};
+	return $self->_status_plugins_by_id()->{$id};
 }
 
 
@@ -256,7 +296,7 @@ Nothing on success, an exception otherwise.
 sub register_client {
 	my ($self, $tx) = @_;
 	Mojo::IOLoop->stream($tx->connection())->timeout(3000);
-	$self->websocket_clients()->{"$tx"} = $tx;
+	$self->_websocket_clients()->{"$tx"} = $tx;
 	$tx->send({
 		json => $self->status()
 	});
@@ -289,7 +329,7 @@ Nothing on success, an exception otherwise.
 sub unregister_client {
 	my ($self, $tx) = @_;
 
-	delete $self->websocket_clients()->{"$tx"};
+	delete $self->_websocket_clients()->{"$tx"};
 	return;
 }
 
