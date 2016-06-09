@@ -9,6 +9,7 @@ requires "List::MoreUtils" => "0";
 requires "List::Util" => "0";
 requires "Log::Any" => "0";
 requires "Log::Any::Adapter" => "0";
+requires "Log::Any::Adapter::MojoLog" => "0";
 requires "MRO::Compat" => "0";
 requires "Mojo::Base" => "0";
 requires "Mojo::EventEmitter" => "0";
