@@ -68,7 +68,7 @@ sub update {
 						push @items, {
 							title   => $item->title(),
 							content => $item->content()->body(),
-							issued  => $item->issued(),
+							issued  => $item->issued() // $item->modified(),
 						};
 					}
 				}
