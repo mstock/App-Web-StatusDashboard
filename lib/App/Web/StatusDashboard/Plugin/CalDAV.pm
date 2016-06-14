@@ -133,7 +133,10 @@ sub update {
 						}
 					}
 					return [
-						sort { $a->{start} cmp $b->{start} } @data
+						sort {
+							$a->{start} cmp $b->{start}
+								|| $a->{summary} cmp $b->{summary}
+						} @data
 					];
 				},
 				sub {
