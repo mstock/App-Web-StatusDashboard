@@ -30,7 +30,7 @@ sub dashboard {
 
 	my $language = HTTP::AcceptLanguage->new(
 		$self->req()->headers()->accept_language()
-	)->match(@{$self->app()->locales()}) // 'en';
+	)->match(@{$self->app()->locales()});
 
 	if (defined $dashboard) {
 		$self->render(

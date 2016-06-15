@@ -14,9 +14,13 @@
 		<%= content %>
 		<script type="text/javascript" src="<%= url_for('lib/Chart.js/dist/Chart.min.js') %>"></script>
 		<script type="text/javascript" src="<%= url_for('lib/moment/moment.js') %>"></script>
+		% if (defined $language) {
 		<script type="text/javascript" src="<%= url_for('lib/moment/locale/' . $language . '.js') %>"></script>
+		% }
 		<script type="text/javascript" src="<%= url_for('lib/angular/angular.min.js') %>"></script>
+		% if (defined $language) {
 		<script type="text/javascript" src="<%= url_for('lib/angular-i18n/angular-locale_' . $language . '.js') %>"></script>
+		% }
 		<script type="text/javascript" src="<%= url_for('lib/angular-bootstrap/ui-bootstrap.min.js') %>"></script>
 		<script type="text/javascript" src="<%= url_for('lib/angular-bootstrap/ui-bootstrap-tpls.min.js') %>"></script>
 		<script type="text/javascript" src="<%= url_for('lib/angular-messages/angular-messages.min.js') %>"></script>
