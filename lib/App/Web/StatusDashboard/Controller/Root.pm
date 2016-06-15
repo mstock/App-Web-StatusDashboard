@@ -42,7 +42,9 @@ sub dashboard {
 	}
 	else {
 		$self->res()->code(404);
-		$self->render();
+		$self->render(
+			language => $language
+		);
 	}
 
 	return;
