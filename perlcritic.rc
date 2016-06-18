@@ -5,3 +5,6 @@ verbose  = 9
 # so there are no strictures and warnings enabled, yet...
 [-TestingAndDebugging::RequireUseStrict]
 [-TestingAndDebugging::RequireUseWarnings]
+
+[Variables::ProhibitPackageVars]
+add_packages = XML::Atom
