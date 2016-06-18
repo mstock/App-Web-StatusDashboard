@@ -60,6 +60,7 @@ sub update {
 		},
 		sub {
 			my ($delay, @transactions) = @_;
+			local $XML::Atom::ForceUnicode = 1;
 			if ($self->transactions_ok(@transactions)) {
 				my @items;
 				for my $tx (@transactions) {
