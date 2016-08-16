@@ -126,10 +126,12 @@ sub update {
 					for my $event ($calendar->events($span, 'day')) {
 						my $event_start = $event->start()->set_time_zone('UTC');
 						my $event_end   = $event->end()->set_time_zone('UTC');
-						push @data, {
-							start   => $self->format_timestamp($event_start),
-							end     => $self->format_timestamp($event_end),
-							summary => $event->summary()
+						if ($event_start >= $start && $event_end <= $end) {
+							push @data, {
+								start   => $self->format_timestamp($event_start),
+								end     => $self->format_timestamp($event_end),
+								summary => $event->summary()
+							}
 						}
 					}
 					return [
