@@ -4,7 +4,7 @@
 	angular.module('StatusDashboard').directive('icinga2', [
 		'statusService',
 		function (statusService) {
-			var HOST_STATUSES = ['UP', 'DOWN'];
+			var HOST_STATUSES = ['UP', 'DOWN', 'UNREACHABLE'];
 			var SERVICE_STATUSES = ['OK', 'WARNING', 'CRITICAL', 'UNKNOWN'];
 			return {
 				restrict:    'E',
