@@ -91,8 +91,11 @@
 				you with the 'surroundings' and will load all the required assets.
 				You can also pass a <code>theme</code> parameter to the layout
 				(i.e. <code>% layout 'default', theme => 'light';</code>) to get
-				a different theme - currently, <code>light</code> and
-				<code>dark</code> (the default) are supported.
+				a different default theme - currently, <code>light</code> and
+				<code>dark</code> (the default) are supported. One can also use
+				a hash fragment like <code>#?theme=light</code> in the URL to
+				select the theme at runtime (which <a href="#?theme=light">works</a>
+				for this help page, <a href="#?theme=dark">too</a>).
 			</p>
 		</div>
 		<div class="col-md-12">

@@ -44,6 +44,33 @@
 				}
 			};
 		}
+	]).directive('theme', [
+		'$location',
+		function ($location) {
+			return {
+				restrict: 'A',
+				link:     function (scope, element, attrs) {
+					scope.$watch('theme', function (newValue, oldValue) {
+						if (oldValue) {
+							element.removeClass(oldValue);
+						}
+						if (newValue) {
+							element.addClass(newValue);
+						}
+					});
+					scope.$watch(function () {
+						return $location.search().theme;
+					}, function (newValue) {
+						scope.theme = (angular.isString(newValue) && newValue !== '')
+							? newValue
+							: attrs.theme;
+					});
+				},
+				scope:    {
+					theme: '@theme'
+				}
+			};
+		}
 	]).directive('statusDisplay', [
 		'statusService',
 		'moment',
