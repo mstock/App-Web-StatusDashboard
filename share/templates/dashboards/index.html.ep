@@ -107,7 +107,7 @@
 				run the status dashboard application from a Git sandbox, which
 				resides at <code>..</code>):
 			</p>
-			<pre>PERL5LIB=../lib MOJO_CONFIG=$PWD/app-web-status_dashboard.conf ../script/status_dashboard daemon</pre>
+			<pre>PERL5LIB=../lib MOJO_CONFIG=$PWD/app-web-status_dashboard.conf ../bin/status-dashboard daemon</pre>
 			<p>
 				Your dashboard will then be available at
 				<a href="http://localhost:3000/">http://localhost:3000/</a>.
