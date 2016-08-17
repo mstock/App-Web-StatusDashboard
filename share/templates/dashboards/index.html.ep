@@ -89,6 +89,10 @@
 			<p>
 				Please note the <code>% layout 'default';</code> - this provides
 				you with the 'surroundings' and will load all the required assets.
+				You can also pass a <code>theme</code> parameter to the layout
+				(i.e. <code>% layout 'default', theme => 'light';</code>) to get
+				a different theme - currently, <code>light</code> and
+				<code>dark</code> (the default) are supported.
 			</p>
 		</div>
 		<div class="col-md-12">

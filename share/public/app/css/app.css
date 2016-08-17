@@ -1,4 +1,4 @@
-body {
+body.dark {
 	color: #666;
 	background-color: #222;
 }
@@ -25,4 +25,8 @@ countdown .countdown-container {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+.light .last-updated-timestamp {
+	color: #999;
 }

@@ -10,7 +10,7 @@
 			<link rel="stylesheet" type="text/css" href="<%= url_for('/plugins/css/' . $plugin->short_name() . '.css') %>"></link>
 		% }
 	</head>
-	<body>
+	<body class="<%= stash('theme') // 'dark' %>">
 		<%= content %>
 		<script type="text/javascript" src="<%= url_for('lib/Chart.js/dist/Chart.min.js') %>"></script>
 		<script type="text/javascript" src="<%= url_for('lib/moment/moment.js') %>"></script>
