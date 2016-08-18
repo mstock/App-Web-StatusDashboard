@@ -15,12 +15,18 @@
 		'$log',
 		function ($http, $websocket, websocketUri, $log) {
 			var status = {};
+			var isConnected = false;
 
 			var dataStream = $websocket(websocketUri);
+			dataStream.onOpen(function () {
+				isConnected = true;
+			});
 			dataStream.onError(function (error) {
+				isConnected = false;
 				$log.error("WebSocket error: ", error);
 			});
 			dataStream.onClose(function (message) {
+				isConnected = false;
 				$log.debug("Connection closed: ", message);
 				dataStream.reconnect();
 			});
@@ -41,6 +47,9 @@
 					return (status && serviceId && serviceId in status)
 						? status[serviceId].last_updated
 						: null;
+				},
+				isConnected: function () {
+					return isConnected;
 				}
 			};
 		}
@@ -69,6 +78,22 @@
 				scope:    {
 					theme: '@theme'
 				}
+			};
+		}
+	]).directive('socketConnectionState', [
+		'statusService',
+		function (statusService) {
+			return {
+				restrict:    'E',
+				link:        function (scope, element, attrs) {
+					scope.$watch(function () {
+						return statusService.isConnected();
+					}, function (newValue) {
+						scope.isConnected = newValue;
+					});
+				},
+				replace:     false,
+				templateUrl: 'app/templates/socket-connection-state.html'
 			};
 		}
 	]).directive('statusDisplay', [
