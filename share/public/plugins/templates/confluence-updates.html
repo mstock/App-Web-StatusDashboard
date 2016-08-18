@@ -2,13 +2,13 @@
 	status-title="{{ statusTitle }}"
 	status-id="{{ statusId }}"
 >
-	<dl ng-repeat="update in updates | limitTo : count || 5">
-		<dt>
+	<dl>
+		<dt ng-repeat-start="update in updates | limitTo : count || 5">
 			{{update.modifier.fullName}}
 		</dt>
-		<dd>
-			<ul ng-repeat="recentUpdate in update.recentUpdates | limitTo: subCount || 3">
-				<li>
+		<dd ng-repeat-end>
+			<ul>
+				<li ng-repeat="recentUpdate in update.recentUpdates | limitTo: subCount || 3">
 					<span
 						class="glyphicon"
 						ng-class="recentUpdate.iconClass"
