@@ -30,3 +30,6 @@ countdown .countdown-container {
 .light .last-updated-timestamp {
 	color: #999;
 }
+.dark .last-updated-timestamp {
+	color: #444;
+}
