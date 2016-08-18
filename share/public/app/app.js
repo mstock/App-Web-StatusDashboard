@@ -15,7 +15,7 @@
 		'$log',
 		function ($http, $websocket, websocketUri, $log) {
 			var status = {};
-			var isConnected = false;
+			var isConnected;
 
 			var dataStream = $websocket(websocketUri);
 			dataStream.onOpen(function () {
