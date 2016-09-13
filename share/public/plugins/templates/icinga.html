@@ -6,20 +6,50 @@
 		<div class="alert alert-danger" role="alert" ng-message="DOWN">
 			{{hostStats.DOWN, plural,
 				=0    {}
-				=1    {One host is in DOWN state.}
-				other {{{hostStats.DOWN}} hosts are in DOWN state.}
+				=1    {One host is in DOWN state{{
+						hostStats.DOWN_ACKNOWLEDGED, plural,
+							=0    {}
+							=1    { but acknowledged}
+							other {}
+						}}.}
+				other {{{hostStats.DOWN}} hosts are in DOWN state{{
+						hostStats.DOWN_ACKNOWLEDGED, plural,
+							=0    {}
+							=1    { but one of them was acknowledged}
+							other { but {{hostStats.DOWN_ACKNOWLEDGED}} of them were acknowledged}
+						}}.}
 			}}
 			{{hostStats.UNREACHABLE, plural,
 				=0    {}
-				=1    {One host is in UNREACHABLE state.}
-				other {{{hostStats.UNREACHABLE}} hosts are in UNREACHABLE state.}
+				=1    {One host is in UNREACHABLE state{{
+						hostStats.UNREACHABLE_ACKNOWLEDGED, plural,
+							=0    {}
+							=1    { but acknowledged}
+							other {}
+						}}.}
+				other {{{hostStats.UNREACHABLE}} hosts are in UNREACHABLE state{{
+						hostStats.UNREACHABLE_ACKNOWLEDGED, plural,
+							=0    {}
+							=1    { but one of them was acknowledged}
+							other { but {{hostStats.UNREACHABLE_ACKNOWLEDGED}} of them were acknowledged}
+						}}.}
 			}}
 		</div>
 		<div class="alert alert-warning" role="alert" ng-message="UNREACHABLE">
 			{{hostStats.UNREACHABLE, plural,
 				=0    {}
-				=1    {One host is in UNREACHABLE state.}
-				other {{{hostStats.UNREACHABLE}} hosts are in UNREACHABLE state.}
+				=1    {One host is in UNREACHABLE state{{
+						hostStats.UNREACHABLE_ACKNOWLEDGED, plural,
+							=0    {}
+							=1    { but acknowledged}
+							other {}
+						}}.}
+				other {{{hostStats.UNREACHABLE}} hosts are in UNREACHABLE state{{
+						hostStats.UNREACHABLE_ACKNOWLEDGED, plural,
+							=0    {}
+							=1    { but one of them was acknowledged}
+							other { but {{hostStats.UNREACHABLE_ACKNOWLEDGED}} of them were acknowledged}
+						}}.}
 			}}
 		</div>
 		<div class="alert alert-success" role="alert" ng-message="UP">
@@ -31,37 +61,97 @@
 		<div class="alert alert-danger" role="alert" ng-message="CRITICAL">
 			{{serviceStats.CRITICAL, plural,
 				=0    {}
-				=1    {One service is in CRITICAL state.}
-				other {{{serviceStats.CRITICAL}} services are in CRITICAL state.}
+				=1    {One service is in CRITICAL state{{
+						serviceStats.CRITICAL_ACKNOWLEDGED, plural,
+							=0    {}
+							=1    { but acknowledged}
+							other {}
+						}}.}
+				other {{{serviceStats.CRITICAL}} services are in CRITICAL state{{
+						serviceStats.CRITICAL_ACKNOWLEDGED, plural,
+							=0    {}
+							=1    { but one of them was acknowledged}
+							other { but {{serviceStats.CRITICAL_ACKNOWLEDGED}} of them were acknowledged}
+						}}.}
 			}}
 			{{serviceStats.WARNING, plural,
 				=0    {}
-				=1    {One service is in WARNING state.}
-				other {{{serviceStats.WARNING}} services are in WARNING state.}
+				=1    {One service is in WARNING state{{
+						serviceStats.WARNING_ACKNOWLEDGED, plural,
+							=0    {}
+							=1    { but acknowledged}
+							other {}
+						}}.}
+				other {{{serviceStats.WARNING}} services are in WARNING state{{
+						serviceStats.WARNING_ACKNOWLEDGED, plural,
+							=0    {}
+							=1    { but one of them was acknowledged}
+							other { but {{serviceStats.WARNING_ACKNOWLEDGED}} of them were acknowledged}
+						}}.}
 			}}
 			{{serviceStats.UNKNOWN, plural,
 				=0    {}
-				=1    {One service is in UNKNOWN state.}
-				other {{{serviceStats.UNKNOWN}} services are in UNKNOWN state.}
+				=1    {One service is in UNKNOWN state{{
+						serviceStats.UNKNOWN_ACKNOWLEDGED, plural,
+							=0    {}
+							=1    { but acknowledged}
+							other {}
+						}}.}
+				other {{{serviceStats.UNKNOWN}} services are in UNKNOWN state{{
+						serviceStats.UNKNOWN_ACKNOWLEDGED, plural,
+							=0    {}
+							=1    { but one of them was acknowledged}
+							other { but {{serviceStats.UNKNOWN_ACKNOWLEDGED}} of them were acknowledged}
+						}}.}
 			}}
 		</div>
 		<div class="alert alert-warning" role="alert" ng-message="WARNING">
 			{{serviceStats.WARNING, plural,
 				=0    {}
-				=1    {One service is in WARNING state.}
-				other {{{serviceStats.WARNING}} services are in WARNING state.}
+				=1    {One service is in WARNING state{{
+						serviceStats.WARNING_ACKNOWLEDGED, plural,
+							=0    {}
+							=1    { but acknowledged}
+							other {}
+						}}.}
+				other {{{serviceStats.WARNING}} services are in WARNING state{{
+						serviceStats.WARNING_ACKNOWLEDGED, plural,
+							=0    {}
+							=1    { but one of them was acknowledged}
+							other { but {{serviceStats.WARNING_ACKNOWLEDGED}} of them were acknowledged}
+						}}.}
 			}}
 			{{serviceStats.UNKNOWN, plural,
 				=0    {}
-				=1    {One service is in UNKNOWN state.}
-				other {{{serviceStats.UNKNOWN}} services are in UNKNOWN state.}
+				=1    {One service is in UNKNOWN state{{
+						serviceStats.UNKNOWN_ACKNOWLEDGED, plural,
+							=0    {}
+							=1    { but acknowledged}
+							other {}
+						}}.}
+				other {{{serviceStats.UNKNOWN}} services are in UNKNOWN state{{
+						serviceStats.UNKNOWN_ACKNOWLEDGED, plural,
+							=0    {}
+							=1    { but one of them was acknowledged}
+							other { but {{serviceStats.UNKNOWN_ACKNOWLEDGED}} of them were acknowledged}
+						}}.}
 			}}
 		</div>
-		<div class="alert alert-warning" role="alert" ng-message="INFO">
+		<div class="alert alert-warning" role="alert" ng-message="UNKNOWN">
 			{{serviceStats.UNKNOWN, plural,
 				=0    {}
-				=1    {One service is in UNKNOWN state.}
-				other {{{serviceStats.UNKNOWN}} services are in UNKNOWN state.}
+				=1    {One service is in UNKNOWN state{{
+						serviceStats.UNKNOWN_ACKNOWLEDGED, plural,
+							=0    {}
+							=1    { but acknowledged}
+							other {}
+						}}.}
+				other {{{serviceStats.UNKNOWN}} services are in UNKNOWN state{{
+						serviceStats.UNKNOWN_ACKNOWLEDGED, plural,
+							=0    {}
+							=1    { but one of them was acknowledged}
+							other { but {{serviceStats.UNKNOWN_ACKNOWLEDGED}} of them were acknowledged}
+						}}.}
 			}}
 		</div>
 		<div class="alert alert-success" role="alert" ng-message="OK">

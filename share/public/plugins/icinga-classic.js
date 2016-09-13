@@ -22,6 +22,7 @@
 						var serviceStatus = {};
 						HOST_STATUSES.forEach(function (status) {
 							hostStats[status] = 0;
+							hostStats[status + '_ACKNOWLEDGED'] = 0;
 							hostStatus[status] = false;
 						});
 						newValue.hosts.status.host_status.forEach(function (host) {
@@ -30,6 +31,7 @@
 						});
 						SERVICE_STATUSES.forEach(function (status) {
 							serviceStats[status] = 0;
+							serviceStats[status + '_ACKNOWLEDGED'] = 0;
 							serviceStatus[status] = false;
 						});
 						newValue.services.status.service_status.forEach(function (service) {
