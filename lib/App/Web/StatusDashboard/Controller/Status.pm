@@ -40,10 +40,9 @@ sub statuswsinit {
 
 	$log->debug('Initializing websocket...');
 	$self->app->register_client($self->tx);
-	$self->on('finished', sub {
+	$self->on('finish', sub {
 		my ($self) = @_;
 		$self->app->unregister_client($self->tx);
-		$log->debug('Client disconnected');
 	});
 	$self->on('message', sub {
 		my ($self, $message) = @_;
