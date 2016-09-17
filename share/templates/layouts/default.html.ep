@@ -12,7 +12,7 @@
 	</head>
 	<body class="<%= stash('theme') // 'dark' %>" theme="<%= stash('theme') // 'dark' %>">
 		<%= content %>
-		<script type="text/javascript" src="<%= url_for('lib/Chart.js/dist/Chart.min.js') %>"></script>
+		<script type="text/javascript" src="<%= url_for('lib/chart.js/dist/Chart.min.js') %>"></script>
 		<script type="text/javascript" src="<%= url_for('lib/moment/moment.js') %>"></script>
 		% if (defined $language) {
 		<script type="text/javascript" src="<%= url_for('lib/moment/locale/' . $language . '.js') %>"></script>
