@@ -2,7 +2,7 @@
 	status-title="{{ statusTitle }}"
 	status-id="{{ statusId }}"
 >
-	<table class="table" ng-if="events.length > 0 && !dayCluster">
+	<table class="table table-condensed" ng-if="events.length > 0 && !dayCluster">
 		<tbody>
 			<tr ng-repeat="event in events | limitTo : count || 10">
 				<td class="start" ng-if="times">{{event.start | date : dateFormat }}</td>
@@ -14,7 +14,7 @@
 	<dl ng-if="events.length > 0 && dayCluster">
 		<dt ng-repeat-start="(date, clusterEvents) in clusteredEvents">{{date}}</dt>
 		<dd ng-repeat-end>
-			<table class="table">
+			<table class="table table-condensed">
 				<tbody>
 					<tr ng-repeat="event in clusterEvents">
 						<td class="start" ng-if="times">{{event.start | date : dateFormat }}</td>
