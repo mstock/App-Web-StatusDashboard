@@ -57,7 +57,7 @@
 		</div>
 	</ng-messages>
 
-	<ng-messages for="serviceStatus" role="alert">
+	<ng-messages for="serviceStatus" role="alert" ng-if="showServiceInfo">
 		<div class="alert alert-danger" role="alert" ng-message="CRITICAL">
 			{{serviceStats.CRITICAL, plural,
 				=0    {}

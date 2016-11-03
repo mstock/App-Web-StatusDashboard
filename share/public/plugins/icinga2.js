@@ -51,12 +51,18 @@
 						scope.serviceStats = serviceStats;
 						scope.serviceStatus = serviceStatus;
 					});
+					scope.$watch('showServiceInfoStr', function (newValue, oldValue) {
+						scope.showServiceInfo = newValue !== undefined
+							? scope.$eval(newValue)
+							: true;
+					});
 				},
 				replace:     false,
 				templateUrl: 'plugins/templates/icinga.html',
 				scope:       {
-					statusId:    '@statusId',
-					statusTitle: '@statusTitle'
+					statusId:           '@statusId',
+					statusTitle:        '@statusTitle',
+					showServiceInfoStr: '@showServiceInfo'
 				}
 			}
 		}
