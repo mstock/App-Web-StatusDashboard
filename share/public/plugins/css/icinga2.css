@@ -1,0 +1,26 @@
+status-display .service {
+	height: 6em;
+}
+
+status-display .service div {
+	transform: rotate(315deg);
+	width: 1em;
+	white-space: nowrap;
+}
+
+status-display .table-condensed > tbody > tr > td.status {
+	font-size: 1.5em;
+	padding: 0;
+}
+
+status-display .status.danger {
+	color: #a94442;
+}
+
+status-display .status.warning {
+	color: #8a6d3b;
+}
+
+status-display .status.info {
+	color: #31708f;
+}

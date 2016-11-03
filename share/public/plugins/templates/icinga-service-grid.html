@@ -1,0 +1,46 @@
+<status-display
+	status-title="{{ statusTitle }}"
+	status-id="{{ statusId }}"
+	ng-if="problemServices.length > 0"
+>
+	<table class="table table-condensed">
+		<thead>
+			<tr>
+				<th></th>
+				<th ng-repeat="service in problemServices" class="service">
+					<div>{{service}}</div>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="host in problemHosts">
+				<th scope="row">{{host}}</th>
+				<td ng-repeat="service in problemServices" ng-class="{
+					'danger': problemHostServiceStates[host][service].status === 'CRITICAL',
+					'warning': problemHostServiceStates[host][service].status === 'WARNING',
+					'info': problemHostServiceStates[host][service].status === 'UNKNOWN'
+				}" class="text-center status">
+					<span
+						ng-if="!problemHostServiceStates[host][service].acknowledged"
+						ng-switch="problemHostServiceStates[host][service].status"
+					>
+						<div ng-switch-when="CRITICAL">
+							☹
+						</div>
+						<div ng-switch-when="WARNING">
+							!
+						</div>
+						<div ng-switch-when="UNKNOWN">
+							?
+						</div>
+					</span>
+					<span
+						ng-if="problemHostServiceStates[host][service].acknowledged"
+					>
+						✓
+					</span>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</status-display>
