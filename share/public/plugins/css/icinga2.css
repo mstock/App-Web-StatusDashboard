@@ -3,9 +3,12 @@ status-display .service {
 }
 
 status-display .service div {
-	transform: rotate(315deg);
-	width: 1em;
+	transform: rotate(180deg);
 	white-space: nowrap;
+	writing-mode: vertical-rl;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	max-height: 8em;
 }
 
 status-display .table-condensed > tbody > tr > td.status {
