@@ -62,7 +62,8 @@
 				scope:       {
 					statusId:           '@statusId',
 					statusTitle:        '@statusTitle',
-					showServiceInfoStr: '@showServiceInfo'
+					showServiceInfoStr: '@showServiceInfo',
+					showLastUpdated:    '@showLastUpdated'
 				}
 			}
 		}
