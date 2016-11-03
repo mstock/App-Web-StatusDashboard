@@ -1,3 +1,6 @@
 <h1 ng-if="statusTitle">{{statusTitle}}</h1>
 <ng-transclude></ng-transclude>
-<p class="pull-right last-updated-timestamp">Last updated: <span am-time-ago="lastUpdated"></span></p>
+<p
+	class="pull-right last-updated-timestamp"
+	ng-if="showLastUpdated"
+>Last updated: <span am-time-ago="lastUpdated"></span></p>

@@ -114,12 +114,18 @@
 							scope.lastUpdated = moment(newValue);
 						}
 					);
+					scope.$watch('showLastUpdatedStr', function (newValue) {
+						scope.showLastUpdated = newValue !== undefined
+							? scope.$eval(newValue)
+							: true;
+					});
 				},
 				replace:     false,
 				templateUrl: 'app/templates/status-display.html',
 				scope:       {
-					statusTitle: '@statusTitle',
-					statusId:    '@statusId'
+					statusTitle:        '@statusTitle',
+					statusId:           '@statusId',
+					showLastUpdatedStr: '@showLastUpdated'
 				},
 				transclude:  true
 			}
