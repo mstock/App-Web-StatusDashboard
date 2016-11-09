@@ -19,6 +19,7 @@
 					'danger': problemHostServiceStates[host][service].status === 'CRITICAL',
 					'warning': problemHostServiceStates[host][service].status === 'WARNING',
 					'info': problemHostServiceStates[host][service].status === 'UNKNOWN'
+						|| problemHostServiceStates[host][service].status === 'PENDING'
 				}" class="text-center status">
 					<span
 						ng-if="!problemHostServiceStates[host][service].acknowledged"
@@ -32,6 +33,9 @@
 						</div>
 						<div ng-switch-when="UNKNOWN">
 							?
+						</div>
+						<div ng-switch-when="PENDING">
+							⌛
 						</div>
 					</span>
 					<span

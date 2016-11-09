@@ -3,6 +3,7 @@
 
 	var HOST_STATUSES = ['UP', 'DOWN', 'UNREACHABLE'];
 	var SERVICE_STATUSES = ['OK', 'WARNING', 'CRITICAL', 'UNKNOWN'];
+	SERVICE_STATUSES[99] = 'PENDING';
 
 	angular.module('StatusDashboard').directive('icinga2', [
 		'statusService',
