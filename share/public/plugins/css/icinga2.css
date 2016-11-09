@@ -13,6 +13,7 @@ status-display .service div {
 
 status-display .table-condensed > tbody > tr > td.status {
 	font-size: 1.5em;
+	width: 1.5em;
 	padding: 0;
 }
 
