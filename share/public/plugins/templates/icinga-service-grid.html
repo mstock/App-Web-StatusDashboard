@@ -20,7 +20,7 @@
 					'warning': problemHostServiceStates[host][service].status === 'WARNING',
 					'info': problemHostServiceStates[host][service].status === 'UNKNOWN'
 						|| problemHostServiceStates[host][service].status === 'PENDING'
-				}" class="text-center status">
+				}" class="text-center status" title="{{problemHostServiceStates[host][service].status}}">
 					<span
 						ng-if="!problemHostServiceStates[host][service].acknowledged"
 						ng-switch="problemHostServiceStates[host][service].status"
