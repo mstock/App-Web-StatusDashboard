@@ -1,0 +1,35 @@
+<status-display
+	status-title="{{ statusTitle }}"
+	status-id="{{ statusId }}"
+>
+	<table class="table table-condensed">
+		<tbody>
+			<tr
+				ng-repeat="potential in potentials() | limitTo : count || 10"
+				ng-class="{
+					'danger': potential.closingDateInPast
+				}"
+			>
+				<td>{{potential.name}}</td>
+				<td><span
+					am-time-ago="potential.closingDate"
+					title="{{ potential.closingDate | date : dateFormat || 'medium' }}"
+				></span></td>
+				<td>
+					<div class="progress" style="min-width: 3em;">
+						<div
+							class="progress-bar progress-bar-success"
+							role="progressbar"
+							aria-valuenow="{{potential.probability}}"
+							aria-valuemin="0"
+							aria-valuemax="100"
+							ng-style="{
+								'width': potential.probability + '%'
+							}"
+						>{{potential.probability}}%</div>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</status-display>
