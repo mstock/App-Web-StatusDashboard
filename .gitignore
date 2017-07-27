@@ -4,3 +4,4 @@
 .*.swp
 /.prove
 /.build
+/App-Web-StatusDashboard-*
