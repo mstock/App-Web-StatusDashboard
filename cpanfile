@@ -2,8 +2,10 @@ requires "Carp" => "0";
 requires "Class::Load" => "0";
 requires "Data::ICal::DateTime" => "0";
 requires "DateTime" => "0";
+requires "Encode" => "0";
 requires "File::ShareDir" => "0";
 requires "File::Spec::Functions" => "0";
+requires "File::Temp" => "0";
 requires "HTTP::AcceptLanguage" => "0";
 requires "List::MoreUtils" => "0";
 requires "List::Util" => "0";
@@ -22,6 +24,7 @@ requires "Mojolicious::Commands" => "0";
 requires "Path::Tiny" => "0";
 requires "Scalar::Util" => "0";
 requires "Set::Tiny" => "0";
+requires "Spreadsheet::XLSX" => "0";
 requires "Test::Deep::NoTest" => "0";
 requires "XML::Feed" => "0";
 requires "lib" => "0";
@@ -34,7 +37,6 @@ on 'build' => sub {
 
 on 'test' => sub {
   requires "File::Find" => "0";
-  requires "File::Temp" => "0";
   requires "Test::Mojo" => "0";
   requires "Test::More" => "0.88";
 };
