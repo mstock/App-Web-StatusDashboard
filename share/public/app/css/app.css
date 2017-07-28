@@ -33,3 +33,10 @@ countdown .countdown-container {
 .dark .last-updated-timestamp {
 	color: #444;
 }
+
+.dark .nav-tabs > li > a, .dark .nav-tabs > li > a:active, .dark .nav-tabs > li > a:focus {
+	background: #222;
+}
+.dark .nav-tabs > li > a:hover {
+	background: #333;
+}
