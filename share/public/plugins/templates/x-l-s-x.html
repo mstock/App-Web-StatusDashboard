@@ -1,0 +1,23 @@
+<status-display
+	status-title="{{ statusTitle }}"
+	status-id="{{ statusId }}"
+>
+	<uib-tabset active="active" justified="true">
+		<uib-tab ng-repeat="sheet in sheets track by $index" heading="{{sheet.name}}">
+			<div class="table-responsive">
+				<table class="table table-condensed">
+					<tr ng-repeat="row in sheet.rows | limitTo: maxRows track by $index">
+						<th
+							ng-if="$parent.$index == 0"
+							ng-repeat="cell in row.cells | limitTo: maxColumns track by $index"
+						>{{cell.value}}</th>
+						<td
+							ng-if="$parent.$index > 0"
+							ng-repeat="cell in row.cells | limitTo: maxColumns track by $index"
+						>{{cell.value}}</td>
+					</tr>
+				</table>
+			</div>
+		</uib-tab>
+	</uib-tabset>
+</status-display>
