@@ -116,4 +116,15 @@ sub update {
 }
 
 
+=head2 has_css
+
+Specialized method to indicate that this plugin has CSS resources.
+
+=cut
+
+sub has_css {
+	return 1;
+}
+
+
 1;
