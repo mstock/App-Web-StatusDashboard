@@ -15,6 +15,9 @@
 				link:        function (scope, element, attrs) {
 					var allPotentials = [];
 					scope.stages = [];
+					scope.style = {
+						'min-width': '3em'
+					};
 					scope.$watch(function () {
 						return statusService.getStatus(scope.statusId)
 					}, function (newValue, oldValue) {
@@ -43,6 +46,12 @@
 					scope.$watch('stagesStr', function (newValue, oldValue) {
 						scope.stages = scope.$eval(newValue);
 					});
+					scope.$watch('progressMinWidth', function (newValue, oldValue) {
+						if (newValue === null || newValue === undefined) {
+							return;
+						}
+						scope.style['min-width'] = newValue;
+					});
 					scope.potentials = function () {
 						return allPotentials.filter(function (potential) {
 							return scope.stages.indexOf(potential.stage) >= 0;
@@ -52,11 +61,12 @@
 				replace:     false,
 				templateUrl: 'plugins/templates/zoho-crm-potentials.html',
 				scope:       {
-					statusId:      '@statusId',
-					statusTitle:   '@statusTitle',
-					stagesStr:     '@stages',
-					count:         '@count',
-					dateFormat:    '@dateFormat'
+					statusId:         '@statusId',
+					statusTitle:      '@statusTitle',
+					stagesStr:        '@stages',
+					count:            '@count',
+					dateFormat:       '@dateFormat',
+					progressMinWidth: '@progressMinWidth'
 				}
 			}
 		}
