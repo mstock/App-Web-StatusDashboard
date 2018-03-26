@@ -13,7 +13,8 @@
 				{ label: 'Failed, building',     color: 'red_anime',      renderColor: '#A9332F' },
 				{ label: 'Disabled',             color: 'disabled',       renderColor: '#5BC0DE' },
 				{ label: 'Not Built',            color: 'notbuilt',       renderColor: '#DDDDDD' },
-				{ label: 'Not Built, building',  color: 'notbuilt_anime', renderColor: '#BDBDBD' }
+				{ label: 'Not Built, building',  color: 'notbuilt_anime', renderColor: '#BDBDBD' },
+				{ label: 'Aborted',              color: 'aborted',        renderColor: '#EDEDED' }
 			];
 			return {
 				restrict:    'E',
