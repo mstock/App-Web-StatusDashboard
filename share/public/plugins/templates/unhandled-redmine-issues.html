@@ -1,0 +1,19 @@
+<status-display
+	status-title="{{ statusTitle }}"
+	status-id="{{ statusId }}"
+>
+	<div class="alert alert-success" role="alert" ng-if="!issues.length">
+		No unhandled recent issues.
+	</div>
+	<ul>
+		<li
+			ng-repeat="issue in issues | orderBy : 'created_on' : true | limitTo : count || 10"
+		>
+			<a ng-href="{{ issue.links.self }}">{{issue.subject}}</a>
+			<span class="issue-created-on" am-time-ago="issue.created_on"></span>
+			<span
+				class="label label-default"
+				ng-class="priorityClass[issue.priority.id]">{{issue.priority.name}}</span>
+		</li>
+	</ul>
+</status-display>
