@@ -28,6 +28,9 @@ has 'handler_uids' => sub { [] };
 
 has 'max_age';
 
+has 'office_hours';
+
+has 'office_hours_time_zone' => sub { 'UTC' };
 
 =head2 new
 
@@ -55,6 +58,25 @@ make the issue considered as 'handled'.
 
 Maximum age of an issue. Expects an ISO8601 duration string. Useful to reduce the
 number of issues fetched from the Redmine API.
+
+=item office_hours
+
+Hash reference where keys are week days (1-7) and values are array references
+of C<ISO 8601> intervals:
+
+	{
+		1 => ['T08:00:00/PT9H'], # Monday, office hours start at 08:00:00, last
+		                         # for 9 hours
+		2 => ['T08:00:00/PT4H', 'T13:00:00/PT4H'], # Tuesday, office hours start
+		                                           # at 08:00:00, last for 8 hours
+		                                           # with a 1 hour lunch break
+		...
+	}
+
+=item office_hours_time_zone
+
+Time zone of the office hours declaration. Defaults to C<UTC>. Should be
+provided as eg. C<Europe/Zurich> for useful DST handling.
 
 =back
 
@@ -170,6 +192,76 @@ sub update {
 	})->wait;
 
 	return;
+}
+
+
+=head2 get_age
+
+Calculate age of a given issue. Only counts the time during the office hours.
+
+=head3 Parameters
+
+This method expects positional parameters.
+
+=over
+
+=item created_on
+
+L<DateTime|DateTime> object with creation date.
+
+=item now
+
+L<DateTime>-based timestamp that should be considered as "now".
+
+=back
+
+=head3 Result
+
+The age as a L<DateTime::Duration|DateTime::Duration> object.
+
+=cut
+
+sub get_age {
+	my ($self, $created_on, $now) = @_;
+
+	$now = $now->clone();
+	$created_on = $created_on->clone();
+	my $current_day = $created_on->clone()->set_time_zone(
+		$self->office_hours_time_zone()
+	);
+	$current_day->set_hour(0);
+	$current_day->set_minute(0);
+	$current_day->set_second(0);
+
+	my $age = DateTime::Duration->new();
+	while ($current_day < $now) {
+		my @office_hours = @{$self->office_hours()->{$current_day->day_of_week()} // []};
+		for my $office_hours (@office_hours) {
+			my $interval = DateTimeX::ISO8601::Interval->parse(
+				$current_day->strftime('%F') . $office_hours,
+				time_zone => $self->office_hours_time_zone()
+			);
+			if ($interval->contains($created_on)) {
+				if ($interval->end() < $now) {
+					$age->add_duration($interval->end()->subtract_datetime($created_on));
+				}
+				else {
+					$age->add_duration($now->subtract_datetime($created_on));
+				}
+			}
+			elsif ($now > $interval->start()) {
+				if ($now < $interval->end()) {
+					$age->add_duration($now->subtract_datetime($interval->start()));
+				}
+				elsif ($created_on < $interval->start()) {
+					$age->add_duration($interval->duration());
+				}
+			}
+		}
+		$current_day->add(days => 1);
+	}
+
+	return $age;
 }
 
 
