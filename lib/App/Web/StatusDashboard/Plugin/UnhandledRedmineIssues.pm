@@ -32,6 +32,10 @@ has 'office_hours';
 
 has 'office_hours_time_zone' => sub { 'UTC' };
 
+has 'warning_threshold';
+
+has 'critical_threshold';
+
 has '_url' => sub {
 	my ($self) = @_;
 
@@ -83,6 +87,14 @@ of C<ISO 8601> intervals:
 
 Time zone of the office hours declaration. Defaults to C<UTC>. Should be
 provided as eg. C<Europe/Zurich> for useful DST handling.
+
+=item warning_threshold
+
+Duration which, when overrun, will trigger a 'warning' state.
+
+=item critical_threshold
+
+Duration which, when overrun, will trigger a 'critical' state.
 
 =back
 
@@ -268,6 +280,59 @@ sub get_age {
 	}
 
 	return $age;
+}
+
+
+=head2 get_issue_status_and_age
+
+Calculates age of given issue and derives the issue status from the age, based
+on the C<warning_threshold> and C<critical_threshold> values.
+
+=head3 Parameters
+
+This method expects positional parameters.
+
+=over
+
+=item issue
+
+Hash reference with issue data.
+
+=item now
+
+L<DateTime>-based timestamp that should be considered as "now".
+
+=back
+
+=head3 Result
+
+A list with issue status (one of C<ok>, C<warning> or C<critical>) and issue age
+as L<DateTime::Duration|DateTime::Duration> object.
+
+=cut
+
+sub get_issue_status_and_age {
+	my ($self, $issue, $now) = @_;
+
+	my $warning_threshold = DateTimeX::ISO8601::Interval->parse(
+		$self->warning_threshold()
+	)->duration();
+	my $critical_threshold = DateTimeX::ISO8601::Interval->parse(
+		$self->critical_threshold()
+	)->duration();
+	my $created_on = DateTime::Format::ISO8601->parse_datetime($issue->{created_on});
+	my $age = $self->get_age($created_on, $now);
+	my $status;
+	if (DateTime::Duration->compare($critical_threshold, $age , $created_on) < 0) {
+		$status = 'critical';
+	}
+	elsif (DateTime::Duration->compare($warning_threshold, $age , $created_on) < 0) {
+		$status = 'warning';
+	}
+	else {
+		$status = 'ok';
+	}
+	return ($status, $age);
 }
 
 
