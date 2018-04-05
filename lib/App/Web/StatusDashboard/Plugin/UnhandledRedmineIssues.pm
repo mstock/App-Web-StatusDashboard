@@ -183,7 +183,13 @@ sub update {
 						$_->res->json()->{issue}
 					} @responses
 				);
+				my $status = (any { $_->{status} eq 'critical' } @issues)
+					? 'critical'
+					: (any { $_->{status} eq 'warning' } @issues)
+						? 'warning'
+						: 'ok';
 				$self->update_status({
+					status => $status,
 					issues => \@issues,
 				});
 			}
