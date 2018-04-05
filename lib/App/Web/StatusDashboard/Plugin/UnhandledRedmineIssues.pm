@@ -32,6 +32,12 @@ has 'office_hours';
 
 has 'office_hours_time_zone' => sub { 'UTC' };
 
+has '_url' => sub {
+	my ($self) = @_;
+
+	return Mojo::URL->new($self->base_url());
+};
+
 =head2 new
 
 Constructor, creates new instance. See L<new|App::Web::StatusDashboard::PollingPlugin/new>
@@ -89,7 +95,7 @@ Update the status in the dashboard.
 sub update {
 	my ($self) = @_;
 
-	my $url = Mojo::URL->new($self->base_url());
+	my $url = $self->_url();
 	my @handler_uids = @{$self->handler_uids()};
 	my @collection_params = (
 		sort => 'created_on:desc',
