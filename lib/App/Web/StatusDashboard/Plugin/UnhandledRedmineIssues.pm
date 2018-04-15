@@ -108,13 +108,13 @@ sub update {
 	my ($self) = @_;
 
 	my $url = $self->_url();
-	my @handler_uids = @{$self->handler_uids()};
 	my @collection_params = (
 		sort => 'created_on:desc',
 	);
 	my @filter;
+	my $now = DateTime->now(time_zone => 'UTC');
 	if (my $max_age = $self->max_age()) {
-		my $created_on = DateTime->now(time_zone => 'UTC')->subtract_duration(
+		my $created_on = $now->clone()->subtract_duration(
 			DateTimeX::ISO8601::Interval->parse($max_age)->duration()
 		);
 		@filter = (
@@ -177,31 +177,15 @@ sub update {
 			# Apply filter, assemble status
 			my ($delay, @responses) = @_;
 			if ($self->transactions_ok(@responses)) {
-				$self->update_status([
-					map {
-						{
-							%{$_},
-							links => {
-								self => $url->clone()->path(
-									'issues/' . $_->{id}
-								)->query(Mojo::Parameters->new())
-							}
-						}
-					}
-					grep {
-						my @editors = uniq map { $_->{user}->{id} } @{$_->{journals} // []};
-						none {
-							my $editor = $_;
-							any {
-								my $handler = $_;
-								$handler eq $editor
-							} @handler_uids
-						} @editors;
-					}
+				my @issues = $self->get_unhandled_issues(
+					$now,
 					map {
 						$_->res->json()->{issue}
 					} @responses
-				]);
+				);
+				$self->update_status({
+					issues => \@issues,
+				});
 			}
 		}
 	)->catch(sub {
@@ -210,6 +194,66 @@ sub update {
 	})->wait;
 
 	return;
+}
+
+
+=head2 get_unhandled_issues
+
+Extract issues that are considered as unhandled from a list of issues.
+
+=head3 Parameters
+
+This method expects positional parameters.
+
+=over
+
+=item now
+
+L<DateTime>-based timestamp that should be considered as "now".
+
+=item issues
+
+Array with the issues that should be filtered.
+
+=back
+
+=head3 Result
+
+The issues that are considered as unhandled, i.e. issues which have not been
+updated by a user with one of the C<handler_uids>.
+
+=cut
+
+sub get_unhandled_issues {
+	my ($self, $now, @issues) = @_;
+
+	my $url = $self->_url();
+	my @handler_uids = @{$self->handler_uids()};
+	return map {
+		+{
+			%{$_->[0]},
+			status => $_->[1],
+			age    => DateTimeX::ISO8601::Interval->new(duration => $_->[2])->format(),
+			links  => {
+				self => $url->clone()->userinfo(undef)->path(
+					'issues/' . $_->[0]->{id}
+				)->query(Mojo::Parameters->new())->to_string()
+			}
+		}
+	}
+	map {
+		[ $_, $self->get_issue_status_and_age($_, $now) ]
+	}
+	grep {
+		my @editors = uniq map { $_->{user}->{id} } @{$_->{journals} // []};
+		none {
+			my $editor = $_;
+			any {
+				my $handler = $_;
+				$handler eq $editor
+			} @handler_uids
+		} @editors;
+	} @issues;
 }
 
 

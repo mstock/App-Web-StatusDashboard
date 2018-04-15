@@ -17,7 +17,7 @@
 							if (newValue === null) {
 								return;
 							}
-							scope.issues = newValue;
+							scope.issues = newValue.issues;
 						}
 					);
 					scope.$watch('priorityClassStr', function (newValue, oldValue) {
