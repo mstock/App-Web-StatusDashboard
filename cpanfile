@@ -2,6 +2,7 @@ requires "Carp" => "0";
 requires "Class::Load" => "0";
 requires "Data::ICal::DateTime" => "0";
 requires "DateTime" => "0";
+requires "DateTimeX::ISO8601::Interval" => "0";
 requires "Encode" => "0";
 requires "File::ShareDir" => "0";
 requires "File::Spec::Functions" => "0";
@@ -17,6 +18,7 @@ requires "Mojo::Base" => "0";
 requires "Mojo::EventEmitter" => "0";
 requires "Mojo::IOLoop" => "0";
 requires "Mojo::IOLoop::ForkCall" => "0";
+requires "Mojo::Parameters" => "0";
 requires "Mojo::URL" => "0";
 requires "Mojo::UserAgent" => "0";
 requires "Mojo::Util" => "0";
@@ -28,6 +30,7 @@ requires "Spreadsheet::XLSX" => "0";
 requires "Test::Deep::NoTest" => "0";
 requires "XML::Feed" => "0";
 requires "lib" => "0";
+requires "perl" => "5.010001";
 requires "strict" => "0";
 requires "warnings" => "0";
 
@@ -36,6 +39,7 @@ on 'build' => sub {
 };
 
 on 'test' => sub {
+  requires "DateTime::Format::ISO8601" => "0";
   requires "File::Find" => "0";
   requires "Test::Mojo" => "0";
   requires "Test::More" => "0.88";
