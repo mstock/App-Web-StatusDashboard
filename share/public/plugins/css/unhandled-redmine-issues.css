@@ -1,7 +1,7 @@
-.dark unhandled-redmine-issues a {
-	color: #666;
+unhandled-redmine-issues ul {
+	padding-left: 0;
 }
 
-.light unhandled-redmine-issues a {
-	color: #333;
+unhandled-redmine-issues li {
+	display: block;
 }

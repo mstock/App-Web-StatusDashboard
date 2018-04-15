@@ -1,6 +1,12 @@
 (function() {
 	'use strict';
 
+	var STATUS_CLASS_MAP = {
+		ok: ['alert', 'alert-info'],
+		warning: ['alert', 'alert-warning'],
+		critical: ['alert', 'alert-danger']
+	};
+
 	angular.module('StatusDashboard').directive('unhandledRedmineIssues', [
 		'statusService',
 		function(statusService) {
@@ -17,7 +23,10 @@
 							if (newValue === null) {
 								return;
 							}
-							scope.issues = newValue.issues;
+							scope.issues = newValue.issues.map(function (issue) {
+								issue.statusClass = STATUS_CLASS_MAP[issue.status];
+								return issue;
+							});
 						}
 					);
 					scope.$watch('priorityClassStr', function (newValue, oldValue) {

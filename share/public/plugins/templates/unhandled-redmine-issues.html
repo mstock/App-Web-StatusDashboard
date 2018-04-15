@@ -8,9 +8,14 @@
 	<ul>
 		<li
 			ng-repeat="issue in issues | orderBy : 'created_on' : true | limitTo : count || 10"
+			ng-class="issue.statusClass"
 		>
-			<a ng-href="{{ issue.links.self }}">{{issue.subject}}</a>
-			<span class="issue-created-on" am-time-ago="issue.created_on"></span>
+			<a class="alert-link" ng-href="{{ issue.links.self }}">{{issue.subject}}</a>
+			<span
+				class="issue-created-on"
+				am-time-ago="issue.created_on"
+				title="{{ issue.created_on | date : dateFormat || 'medium' }}"
+			></span>
 			<span class="issue-age">({{issue.age | amDurationFormat }})</span>
 			<span
 				class="label label-default"
