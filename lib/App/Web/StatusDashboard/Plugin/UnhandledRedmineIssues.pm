@@ -155,7 +155,10 @@ sub update {
 					}
 				}
 				else {
-					$self->update_status([]);
+					$self->update_status({
+						status => 'ok',
+						issues => [],
+					});
 				}
 			}
 		},
