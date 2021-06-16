@@ -99,11 +99,14 @@ sub update {
 		sub {
 			my ($delay) = @_;
 			for my $source (@{$self->sources() // []}) {
-				my $tx = $self->ua()->build_tx(REPORT => $source => sprintf(
-					$filter,
-					$self->format_timestamp_compact($start),
-					$self->format_timestamp_compact($end),
-				));
+				my $tx = $self->ua()->build_tx(REPORT => $source => {
+						'Content-Type' => 'text/xml'
+					} => sprintf(
+						$filter,
+						$self->format_timestamp_compact($start),
+						$self->format_timestamp_compact($end),
+					)
+				);
 				$self->ua()->start($tx => $delay->begin());
 			}
 		},
