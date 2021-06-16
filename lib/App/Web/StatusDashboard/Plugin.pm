@@ -157,7 +157,7 @@ sub transactions_ok {
 	}
 
 	# HTTP non-200 status?
-	my @errors = grep { ! $_->res()->is_status_class(200) } @transactions;
+	my @errors = grep { ! $_->res()->is_success() } @transactions;
 	if (scalar @errors) {
 		confess([ map { $_->error() } @errors ]);
 	}
