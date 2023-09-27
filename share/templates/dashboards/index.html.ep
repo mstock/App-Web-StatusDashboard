@@ -47,7 +47,7 @@
 				i.e. a Perl data structure. It should look about as follows:
 			</p>
 			<pre>{
-    'plugins'        => {
+    'status_plugins' => {
         'App::Web::StatusDashboard::Plugin::Feed' => {
             'slashdot' => {
                 # Data that will be passed to the plugin constructor

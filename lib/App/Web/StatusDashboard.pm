@@ -151,19 +151,20 @@ sub startup {
 sub _load_plugins {
 	my ($self, $config) = @_;
 
-	my @plugins;
-	for my $plugin_class (keys %{$config->{plugins}}) {
+	my @plugin_instances;
+	my $status_plugins = $config->{status_plugins};
+	for my $plugin_class (keys %{$status_plugins}) {
 		load_class($plugin_class);
-		for my $instance_id (keys %{$config->{plugins}->{$plugin_class}}) {
-			push @plugins, $plugin_class->new(+{
-				%{$config->{plugins}->{$plugin_class}->{$instance_id}},
+		for my $instance_id (keys %{$status_plugins->{$plugin_class}}) {
+			push @plugin_instances, $plugin_class->new(+{
+				%{$status_plugins->{$plugin_class}->{$instance_id}},
 				id        => $instance_id,
 				dashboard => $self,
 			});
 		}
 	}
 
-	return @plugins;
+	return @plugin_instances;
 }
 
 
