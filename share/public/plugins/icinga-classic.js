@@ -42,6 +42,7 @@
 						scope.hostStatus = hostStatus;
 						scope.serviceStats = serviceStats;
 						scope.serviceStatus = serviceStatus;
+						scope.showServiceInfo = true;
 					});
 				},
 				replace:     false,

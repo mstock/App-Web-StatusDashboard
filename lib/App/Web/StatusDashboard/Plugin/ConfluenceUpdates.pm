@@ -18,6 +18,8 @@ from a Confluence instance.
 
 
 has 'url';
+has 'username';
+has 'token';
 
 
 =head2 new
@@ -40,6 +42,14 @@ URL where update can be retrieved. May look as follows:
 		maxResults=40&tab=all&showProfilePic=false&labels=&spaces=&users=&types=& \
 		category=&spaceKey=
 
+=item username
+
+Username to use when logging in to Jira.
+
+=item token
+
+API token to use.
+
 =back
 
 =head2 update
@@ -51,21 +61,15 @@ Update the status in the dashboard.
 sub update {
 	my ($self) = @_;
 
-	Mojo::IOLoop->delay(
-		sub {
-			my ($delay) = @_;
-			$self->ua()->get(
-				$self->url() => $delay->begin()
-			);
-		},
-		sub {
-			my ($delay, $updates) = @_;
-			if ($self->transactions_ok($updates)) {
-				$self->update_status($updates->res->json()->{changeSets});
-			}
+	my $url = Mojo::URL->new($self->url());
+	$url->userinfo($self->username() . ':' . $self->token());
+	$self->ua()->get_p($url)->then(sub {
+		my ($updates) = @_;
+		if ($self->transactions_ok($updates)) {
+			$self->update_status($updates->res->json()->{changeSets});
 		}
-	)->catch(sub {
-		my ($delay, $err) = @_;
+	})->catch(sub {
+		my ($err) = @_;
 		$self->log_update_error($err);
 	})->wait;
 

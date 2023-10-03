@@ -7,6 +7,7 @@ use Mojo::Base 'App::Web::StatusDashboard::PollingPlugin';
 use 5.010001;
 use Mojo::URL;
 use Mojo::Parameters;
+use Mojo::Promise;
 use DateTime;
 use DateTimeX::ISO8601::Interval;
 use List::MoreUtils qw(uniq none any);
@@ -122,83 +123,83 @@ sub update {
 		);
 	}
 
-	Mojo::IOLoop->delay(
-		sub {
-			# Fetch count
-			my ($delay) = @_;
-			$self->ua()->get(
-				$url->clone()->query([
-					limit => 1,
-					@filter,
-					@collection_params,
-				]) => $delay->begin()
-			);
-		},
-		sub {
-			# Fetch all issues
-			my ($delay, $basic) = @_;
-			if ($self->transactions_ok($basic)) {
-				my $total = $basic->res()->json()->{total_count};
-				if ($total > 0) {
-					my $offset = 0;
-					my $limit = 50;
-					while ($offset < $total) {
-						$self->ua()->get(
-							$url->clone()->query([
-								limit  => $limit,
-								offset => $offset,
-								@filter,
-								@collection_params,
-							]) => $delay->begin()
-						);
-						$offset = $offset + $limit;
-					}
-				}
-				else {
-					$self->update_status({
-						status => 'ok',
-						issues => [],
-					});
-				}
-			}
-		},
-		sub {
-			# Fetch issue details
-			my ($delay, @responses) = @_;
-			if ($self->transactions_ok(@responses)) {
-				for my $issue (map { @{$_->res->json()->{issues}} } @responses) {
-					my $issue_url = $url->clone()->path('issues/' . $issue->{id} . '.json');
-					$self->ua()->get(
-						$issue_url->query([
-							include => 'journals'
-						]) => $delay->begin()
+	$self->ua()->get_p(
+		# Fetch count
+		$url->clone()->query([
+			limit => 1,
+			@filter,
+			@collection_params,
+		])
+	)->then(sub {
+		# Fetch all issues
+		my ($basic) = @_;
+		my @promises;
+		if ($self->transactions_ok($basic)) {
+			my $total = $basic->res()->json()->{total_count};
+			if ($total > 0) {
+				my $offset = 0;
+				my $limit = 50;
+				while ($offset < $total) {
+					push @promises, $self->ua()->get_p(
+						$url->clone()->query([
+							limit  => $limit,
+							offset => $offset,
+							@filter,
+							@collection_params,
+						])
 					);
+					$offset = $offset + $limit;
 				}
 			}
-		},
-		sub {
-			# Apply filter, assemble status
-			my ($delay, @responses) = @_;
-			if ($self->transactions_ok(@responses)) {
-				my @issues = $self->get_unhandled_issues(
-					$now,
-					map {
-						$_->res->json()->{issue}
-					} @responses
-				);
-				my $status = (any { $_->{status} eq 'critical' } @issues)
-					? 'critical'
-					: (any { $_->{status} eq 'warning' } @issues)
-						? 'warning'
-						: 'ok';
+			else {
 				$self->update_status({
-					status => $status,
-					issues => \@issues,
+					status => 'ok',
+					issues => [],
 				});
 			}
+		};
+		scalar @promises
+			? Mojo::Promise->all(@promises)
+			: ();
+	})->then(sub {
+		# Fetch issue details
+		my (@responses) = map { @{$_} } @_;
+		my @promises;
+		if (scalar @responses && $self->transactions_ok(@responses)) {
+			for my $issue (map { @{$_->res->json()->{issues}} } @responses) {
+				my $issue_url = $url->clone()->path('issues/' . $issue->{id} . '.json');
+				push @promises, $self->ua()->get_p(
+					$issue_url->query([
+						include => 'journals'
+					])
+				);
+			}
 		}
-	)->catch(sub {
-		my ($delay, $err) = @_;
+		scalar @promises
+			? Mojo::Promise->all(@promises)
+			: ();
+	})->then(sub {
+		# Apply filter, assemble status
+		my (@responses) = map { @{$_} } @_;
+		if (scalar @responses && $self->transactions_ok(@responses)) {
+			my @issues = $self->get_unhandled_issues(
+				$now,
+				map {
+					$_->res->json()->{issue}
+				} @responses
+			);
+			my $status = (any { $_->{status} eq 'critical' } @issues)
+				? 'critical'
+				: (any { $_->{status} eq 'warning' } @issues)
+					? 'warning'
+					: 'ok';
+			$self->update_status({
+				status => $status,
+				issues => \@issues,
+			});
+		}
+	})->catch(sub {
+		my ($err) = @_;
 		$self->log_update_error($err);
 	})->wait;
 

@@ -5,6 +5,7 @@ use Mojo::Base 'App::Web::StatusDashboard::PollingPlugin';
 # ABSTRACT: Simple plugin to fetch status from Jenkins
 
 use Mojo::URL;
+use Mojo::Promise;
 
 
 =head1 DESCRIPTION
@@ -48,31 +49,27 @@ sub update {
 	my ($self) = @_;
 
 	my $url = Mojo::URL->new($self->base_url());
-	Mojo::IOLoop->delay(
-		sub {
-			my ($delay) = @_;
-			$self->ua()->get(
-				$url->clone()->path('computer/api/json')->query([
-					tree => 'busyExecutors,totalExecutors'
-				]) => $delay->begin()
-			);
-			$self->ua()->get(
-				$url->clone()->path('api/json')->query([
-					tree => 'jobs[name,color]'
-				]) => $delay->begin()
-			);
-		},
-		sub {
-			my ($delay, $executors, $jobs) = @_;
-			if ($self->transactions_ok($executors, $jobs)) {
-				$self->update_status({
-					executors => $executors->res->json(),
-					jobs      => $jobs->res->json()->{jobs}
-				});
-			}
+	Mojo::Promise->all(
+		$self->ua()->get_p(
+			$url->clone()->path('computer/api/json')->query([
+				tree => 'busyExecutors,totalExecutors'
+			])
+		),
+		$self->ua()->get_p(
+			$url->clone()->path('api/json')->query([
+				tree => 'jobs[name,color]'
+			])
+		)
+	)->then(sub {
+		my ($executors, $jobs) = map { @{$_} } @_;
+		if ($self->transactions_ok($executors, $jobs)) {
+			$self->update_status({
+				executors => $executors->res->json(),
+				jobs      => $jobs->res->json()->{jobs}
+			});
 		}
-	)->catch(sub {
-		my ($delay, $err) = @_;
+	})->catch(sub {
+		my ($err) = @_;
 		$self->log_update_error($err);
 	})->wait;
 

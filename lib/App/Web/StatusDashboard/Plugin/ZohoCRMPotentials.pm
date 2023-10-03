@@ -80,35 +80,29 @@ sub update {
 	my ($self) = @_;
 
 	my $url = Mojo::URL->new($self->url());
-	Mojo::IOLoop->delay(
-		sub {
-			my ($delay) = @_;
-			my $last_modified = DateTime->now()->subtract(
-				%{$self->max_age()}
-			)->strftime('%F %T');
-			$self->ua()->get(
-				$url->clone()->query([
-					scope            => $self->scope(),
-					newFormat        => 2,
-					version          => 2,
-					sortColumnString => $self->sort_column(),
-					sortOrderString  => $self->sort_order(),
-					fromIndex        => $self->from(),
-					toIndex          => $self->to(),
-					lastModifiedTime => $last_modified,
-				]) => $delay->begin()
+	my $last_modified = DateTime->now()->subtract(
+		%{$self->max_age()}
+	)->strftime('%F %T');
+	$self->ua()->get_p(
+		$url->clone()->query([
+			scope            => $self->scope(),
+			newFormat        => 2,
+			version          => 2,
+			sortColumnString => $self->sort_column(),
+			sortOrderString  => $self->sort_order(),
+			fromIndex        => $self->from(),
+			toIndex          => $self->to(),
+			lastModifiedTime => $last_modified,
+		])
+	)->then(sub {
+		my ($potentials) = @_;
+		if ($self->transactions_ok($potentials)) {
+			$self->update_status(
+				$potentials->res()->json()->{response}->{result}->{Potentials}->{row} // []
 			);
-		},
-		sub {
-			my ($delay, $potentials) = @_;
-			if ($self->transactions_ok($potentials)) {
-				$self->update_status(
-					$potentials->res()->json()->{response}->{result}->{Potentials}->{row} // []
-				);
-			}
-		},
-	)->catch(sub {
-		my ($delay, $err) = @_;
+		}
+	})->catch(sub {
+		my ($err) = @_;
 		$self->log_update_error($err);
 	})->wait;
 

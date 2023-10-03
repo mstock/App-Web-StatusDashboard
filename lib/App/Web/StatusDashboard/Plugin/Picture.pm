@@ -48,29 +48,23 @@ Update the status in the dashboard.
 sub update {
 	my ($self) = @_;
 
-	Mojo::IOLoop->delay(
-		sub {
-			my ($delay) = @_;
-			$self->ua()->get($self->url() => $delay->begin());
-		},
-		sub {
-			my ($delay, $tx) = @_;
-			if ($self->transactions_ok($tx)) {
-				my $content_type = $tx->res()->headers()->content_type();
-				unless (defined $content_type) {
-					confess('No content type in response');
-				}
-				unless ($content_type =~ m{^image/\w+$}x) {
-					confess('Unsupported content type ' . $content_type . ' in response');
-				}
-				$self->update_status({
-					data => 'data:' . $content_type . ';base64,'
-						. b64_encode($tx->res()->body())
-				});
+	$self->ua()->get_p($self->url())->then(sub {
+		my ($tx) = @_;
+		if ($self->transactions_ok($tx)) {
+			my $content_type = $tx->res()->headers()->content_type();
+			unless (defined $content_type) {
+				confess('No content type in response');
 			}
+			unless ($content_type =~ m{^image/\w+$}x) {
+				confess('Unsupported content type ' . $content_type . ' in response');
+			}
+			$self->update_status({
+				data => 'data:' . $content_type . ';base64,'
+					. b64_encode($tx->res()->body())
+			});
 		}
-	)->catch(sub {
-		my ($delay, $err) = @_;
+	})->catch(sub {
+		my ($err) = @_;
 		$self->log_update_error($err);
 	})->wait;
 

@@ -3,7 +3,7 @@
 	status-id="{{ statusId }}"
 >
 	<ul>
-		<li ng-repeat="issue in issues | orderBy : orderBy || 'created_on' : reverse | limitTo : count || 10">
+		<li ng-repeat="issue in issues | orderBy : orderBy || 'fields.created' : reverse | limitTo : count || 10">
 			{{issue.fields.summary}}
 			<span
 				class="label label-default"

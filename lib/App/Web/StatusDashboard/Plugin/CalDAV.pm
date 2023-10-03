@@ -6,9 +6,9 @@ use Mojo::Base 'App::Web::StatusDashboard::PollingPlugin';
 
 use Carp;
 use Mojo::URL;
+use Mojo::Promise;
 use DateTime;
 use Data::ICal::DateTime;
-use Mojo::IOLoop::ForkCall;
 
 
 =head1 DESCRIPTION
@@ -95,65 +95,54 @@ sub update {
 	$start->set_time_zone('UTC');
 	$end->set_time_zone('UTC');
 
-	Mojo::IOLoop->delay(
-		sub {
-			my ($delay) = @_;
-			for my $source (@{$self->sources() // []}) {
-				my $tx = $self->ua()->build_tx(REPORT => $source => {
-						'Content-Type' => 'text/xml'
-					} => sprintf(
-						$filter,
-						$self->format_timestamp_compact($start),
-						$self->format_timestamp_compact($end),
-					)
-				);
-				$self->ua()->start($tx => $delay->begin());
-			}
-		},
-		sub {
-			my ($delay, @transactions) = @_;
+	Mojo::Promise->all(
+		map {
+			$self->ua()->start_p($self->ua()->build_tx(REPORT => $_ => {
+				'Content-Type' => 'text/xml'
+			} => sprintf(
+				$filter,
+					$self->format_timestamp_compact($start),
+					$self->format_timestamp_compact($end),
+				)
+			));
+		} @{$self->sources() // []}
+	)->then(sub {
+		my (@transactions) = map { @{$_} } @_;
 
-			Mojo::IOLoop::ForkCall->new()->run(
-				sub {
-					my @data;
-					my $ical_data = $self->_extract_ical_data(@transactions);
-					unless (defined $ical_data) {
-						return [];
-					}
-					my $calendar = Data::ICal->new(
-						data => $ical_data
-					);
-					unless ($calendar) {
-						confess($calendar->error_message());
-					}
-					for my $event ($calendar->events($span, 'day')) {
-						my $event_start = $event->start()->set_time_zone('UTC');
-						my $event_end   = $event->end()->set_time_zone('UTC');
-						if ($event_start >= $start && $event_end <= $end) {
-							push @data, {
-								start   => $self->format_timestamp($event_start),
-								end     => $self->format_timestamp($event_end),
-								summary => $event->summary()
-							}
-						}
-					}
-					return [
-						sort {
-							$a->{start} cmp $b->{start}
-								|| $a->{summary} cmp $b->{summary}
-						} @data
-					];
-				},
-				sub {
-					my ($fc, $err, $data) = @_;
-					if ($err) {
-						confess($err)
-					}
-					$self->update_status($data);
-				}
+		Mojo::IOLoop->subprocess()->run_p(sub {
+			my @data;
+			my $ical_data = $self->_extract_ical_data(@transactions);
+			unless (defined $ical_data) {
+				return [];
+			}
+			my $calendar = Data::ICal->new(
+				data => $ical_data
 			);
-		},
-	)->catch(sub {
+			unless ($calendar) {
+				confess($calendar->error_message());
+			}
+			for my $event ($calendar->events($span, 'day')) {
+				my $event_start = $event->start()->set_time_zone('UTC');
+				my $event_end   = $event->end()->set_time_zone('UTC');
+				if ($event_start >= $start && $event_end <= $end) {
+					push @data, {
+						start   => $self->format_timestamp($event_start),
+						end     => $self->format_timestamp($event_end),
+						summary => $event->summary()
+					}
+				}
+			}
+			return [
+				sort {
+					$a->{start} cmp $b->{start}
+						|| $a->{summary} cmp $b->{summary}
+				} @data
+			];
+		})
+	})->then(sub {
+		my ($data) = @_;
+		$self->update_status($data);
+	})->catch(sub {
 		my ($delay, $err) = @_;
 		$self->log_update_error($err);
 	})->wait;

@@ -50,27 +50,21 @@ Update the status in the dashboard.
 sub update {
 	my ($self) = @_;
 
-	Mojo::IOLoop->delay(
-		sub {
-			my ($delay) = @_;
-			$self->ua()->max_redirects(5);
-			$self->ua()->get($self->url() => $delay->begin());
-		},
-		sub {
-			my ($delay, $tx) = @_;
-			if ($self->transactions_ok($tx)) {
-				my $tmp_file = File::Temp->new();
-				print {$tmp_file} $tx->res()->body()
-					or confess('Failed to write data to temporary file');
-				$tmp_file->close();
-				my $xlsx = Spreadsheet::XLSX->new($tmp_file->filename());
-				$self->update_status({
-					sheets => [ $self->_convert_xlsx($xlsx) ],
-				});
-			}
+	$self->ua()->max_redirects(5);
+	$self->ua()->get_p($self->url())->then(sub {
+		my ($tx) = @_;
+		if ($self->transactions_ok($tx)) {
+			my $tmp_file = File::Temp->new();
+			print {$tmp_file} $tx->res()->body()
+				or confess('Failed to write data to temporary file');
+			$tmp_file->close();
+			my $xlsx = Spreadsheet::XLSX->new($tmp_file->filename());
+			$self->update_status({
+				sheets => [ $self->_convert_xlsx($xlsx) ],
+			});
 		}
-	)->catch(sub {
-		my ($delay, $err) = @_;
+	})->catch(sub {
+		my ($err) = @_;
 		$self->log_update_error($err);
 	})->wait;
 
